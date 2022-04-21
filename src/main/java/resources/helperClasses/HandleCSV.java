@@ -1,5 +1,7 @@
 package resources.helperClasses;
 import org.apache.commons.io.input.ReversedLinesFileReader;
+import resources.objects.Item;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -135,5 +137,44 @@ public class HandleCSV {
             e.printStackTrace();
         }
         return result;
+    }
+
+    public static ArrayList<Item> getItems(){
+
+        String itemListPath = "src/main/java/resources/datasheets/itemsData.csv";
+        try {
+            String line = "";
+            ArrayList<Item> itemList = new ArrayList<>();
+            File file = new File(itemListPath);
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            while ((line = br.readLine()) != null) {
+                String[] products = line.split(",");
+
+
+                Item item = new Item();
+                for(int i = 0;i<products.length;i++){
+                    String data = products[i];
+                    switch (i){
+                        case 0 : item.setCategory(data);
+                        case 1 : item.setName(data);
+                        case 2 : item.setPrice(data);
+                        case 3 : item.setDetails(data);
+                        case 4 : item.setVeg_nonVeg(data);
+                        case 5 : item.setDuration(data);
+                        case 6 : item.setImgUrl(data);
+                        case 7 : item.setAvailability(data);
+                    }
+                }
+
+                itemList.add(item);
+            }
+            return itemList;
+
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found! check the correct file path.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

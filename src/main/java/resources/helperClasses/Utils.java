@@ -10,6 +10,7 @@ import org.testng.Assert;
 import resources.baseClass.BaseClass;
 import testAutomationListner.Log;
 import java.io.IOException;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -33,6 +34,15 @@ public class Utils extends BaseClass
     public static void implicitWait(int seconds)
     {
         driver.manage().timeouts().implicitlyWait(seconds, TimeUnit.SECONDS);
+    }
+
+    /*This method is to apply implicit wait
+     *@param seconds is the first parameter in implicitWait
+     */
+    public static void implicitWaitUntilElementVisible(WebElement webElement)
+    {
+        while (!webElement.isDisplayed())
+            driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
     }
 
 
@@ -292,5 +302,14 @@ public class Utils extends BaseClass
     public static void extentScreenShotCapture(ExtentTest logInfo,String logInfoMsg) throws IOException {
         logInfo.pass(logInfoMsg);
         logInfo.addScreenCaptureFromPath(captureScreenShot(driver));
+    }
+
+    public static void switchFrame(WebElement frameElement){
+
+        while (!frameElement.isDisplayed()){
+            Utils.implicitWait(1);
+        }
+
+        driver.switchTo().frame(frameElement);
     }
 }
