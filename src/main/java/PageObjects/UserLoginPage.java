@@ -22,6 +22,7 @@ public class UserLoginPage extends BaseClass {
     static By success=By.xpath("//div[contains(text(),'Success')]");
     static By cart_empty=By.xpath("//div[@class='ng-star-inserted']/div[2]/div[1]");
     static By Admin_login=By.xpath("//a[contains(text(),'Login Here')]");
+    static By cartButton = By.xpath("//a[contains(text(),'Cart')]");
 
 
 
@@ -34,11 +35,11 @@ public class UserLoginPage extends BaseClass {
 
 
     public static void goto_login_page(){
-        driver.findElement(Login_Page).click();
+        Utils.searchandclick(driver.findElement(Login_Page));
     }
 
-    public static void goto_admin_logi(){
-        driver.findElement(Admin_login).click();
+    public static void goto_admin_login(){
+        Utils.searchandclick(driver.findElement(Admin_login));
     }
 
 
@@ -58,21 +59,40 @@ public class UserLoginPage extends BaseClass {
         Log.info("Clicking on Login");
         driver.findElement(login).click();
         driver.findElement(success);
+        logInfo.pass("Login success");
         Utils.extentScreenShotCapture(logInfo,"Login Successfull",success);
     }
 
 
-    public static void verify_logo(ExtentTest test){
+    public static void verify_logo(ExtentTest test) throws IOException {
         logInfo=test.createNode("Logo verification");
         boolean logo_status=driver.findElement(logo).isDisplayed();
-        Assert.assertEquals(logo_status,true);
+        try{
+            Assert.assertEquals(logo_status,true);
+            logInfo.pass("Logo is present");
+            Utils.extentScreenShotCapture(logInfo,"Logo is displayed",logo);
+        }
+        catch (AssertionError e){
+            logInfo.fail("Logo is not present");
+            Utils.extentScreenShotCapture(logInfo,"Logo is not displayed",logo);
+        }
         Log.info("Logo is present");
     }
 
-    public static void cartempty(ExtentTest test){
+    public static void cartempty(ExtentTest test) throws IOException, InterruptedException {
         logInfo=test.createNode("Cart empty");
+        Utils.searchandclick(driver.findElement(cartButton));
+        Utils.wait(1000);
         String cart_status=driver.findElement(cart_empty).getText();
-        Assert.assertEquals(cart_status,"Your cart is empty");
+        try{
+            Assert.assertEquals(cart_status,"Your cart is empty");
+            logInfo.pass("cart is empty");
+            Utils.extentScreenShotCapture(logInfo,"cart is empty",cart_empty);
+        }
+        catch (Exception e){
+            logInfo.fail("Cart is not empty");
+            Utils.extentScreenShotCapture(logInfo,"cart is not empty",cart_empty);
+        }
         Log.info("Cart is empty");
     }
 
@@ -95,6 +115,7 @@ public class UserLoginPage extends BaseClass {
         Log.info("Clicking on Login");
         driver.findElement(login).click();
         driver.findElement(failed);
+        logInfo.pass("Login failed for invalid credentials");
         Utils.extentScreenShotCapture(logInfo,"Login Failed",failed);
     }
 }
