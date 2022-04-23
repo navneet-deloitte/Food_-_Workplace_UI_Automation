@@ -33,3 +33,15 @@
 [INFO ] 2022-04-20 21:47:40.946 [main] Log - Loading base url from data file...
 [INFO ] 2022-04-20 21:47:40.947 [main] Log - Launching...
 [INFO ] 2022-04-20 21:47:46.728 [main] Log - Url Launched Successfully...
+[INFO ] 2022-04-23 20:10:20.298 [main] Log - Read the Ordered Food Items from the CSV File. For Validating the Cart Items
+[INFO ] 2022-04-23 20:10:20.347 [main] Log - Fetched the 'Item Names' from the Cart in Order History Page
+[INFO ] 2022-04-23 20:10:20.347 [main] Log - Successfully Validated the Ordered Food Items in Order History Page
+[INFO ] 2022-04-23 20:10:21.903 [main] Log - Clicked on ReOrder Button
+[INFO ] 2022-04-23 20:10:23.493 [main] Log - Order Recieved, Chef will perform his Magic Soon!!
+[INFO ] 2022-04-23 20:10:23.777 [main] Log - Clicked On Details Button In Order Status Page
+[INFO ] 2022-04-23 20:10:24.078 [main] Log - Fetched the Item names from the Order Status Page
+[INFO ] 2022-04-23 20:10:24.078 [main] Log - Asserting the Reordered Items in Order Status Page
+[INFO ] 2022-04-23 20:10:24.078 [main] Log - Successfully validated the Re ordered Food Items in Order Status Page
+[INFO ] 2022-04-23 20:14:58.812 [main] Log - Read the Ordered Food Items from the CSV File. For Validating the Cart Items
+[INFO ] 2022-04-23 20:15:18.882 [main] Log - Fetched the 'Item Names' from the Cart in Order History Page
+[INFO ] 2022-04-23 20:15:18.882 [main] Log - Successfully Validated the Ordered Food Items in Order History Page

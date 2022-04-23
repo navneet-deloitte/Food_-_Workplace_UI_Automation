@@ -1,10 +1,8 @@
 package resources.helperClasses;
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.Status;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
@@ -321,5 +319,9 @@ public class Utils extends BaseClass
                 jse.executeScript("arguments[0].scrollIntoView()", path);
             }
         }
+    }
+    public static void scrollDown(){
+        Actions action = new Actions(driver);
+        action.sendKeys(Keys.PAGE_DOWN).build().perform();    //scroll down a page
     }
 }
