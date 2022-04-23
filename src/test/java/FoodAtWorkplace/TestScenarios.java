@@ -1,8 +1,12 @@
 package FoodAtWorkplace;
+import PageObjects.AdminLogin;
 import PageObjects.LaunchUrl;
+import PageObjects.UserRegister;
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.Status;
+import org.junit.After;
+import org.openqa.selenium.By;
 import org.testng.annotations.*;
 import resources.baseClass.BaseClass;
 import resources.helperClasses.Utils;
@@ -16,8 +20,7 @@ public class TestScenarios extends BaseClass {
     ExtentTest test;
     LaunchUrl launchUrl = new LaunchUrl();
 
-//    @BeforeClass(groups = {"smoke","regression","functional"})
-    @Test
+    @BeforeClass(groups = {"smoke","regression","functional"})
     public void launchUrl() throws IOException {
 
         test=extent.createTest("Launch Url");
@@ -28,21 +31,24 @@ public class TestScenarios extends BaseClass {
 
     }
 
-
     // TODO add all scenarios and test cases here
 
     @Test
-    public void Test1(){
+    public void Test1() throws IOException, InterruptedException {
+        UserRegister.register(test);
+//        AdminLogin.goto_login_page();
+//        AdminLogin.loginHereFunctionality();
+//        AdminLogin.invalid_login(test);
         ExtentTest extentTest = extent.createTest("Test 1");
 
         extentTest.log(Status.PASS,"Success");
     }
 
 
+   @AfterClass
+   public void tearDown()
+   {
+       driver.quit();
+   }
 
-    @AfterClass(groups = {"smoke","regression","functional"})
-    public void tearDown()
-    {
-        driver.quit();
-    }
 }

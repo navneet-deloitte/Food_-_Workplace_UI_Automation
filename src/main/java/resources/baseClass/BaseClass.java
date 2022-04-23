@@ -12,7 +12,7 @@ import java.util.Properties;
 
 public class BaseClass extends ExtentReportListener {
     public static WebDriver driver;
-    public Properties properties;
+    public static Properties properties;
     public static ExtentTest test;
 
 
