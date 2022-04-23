@@ -304,6 +304,34 @@ public class Utils extends BaseClass
         logInfo.addScreenCaptureFromPath(captureScreenShot(driver));
     }
 
+    public static void highlightElement(WebElement guide)
+    {
+        JavascriptExecutor executor = (JavascriptExecutor)driver;
+        executor.executeScript("arguments[0].style.border='2px solid red'", guide);
+
+    }
+
+    public static void extentScreenShotCapture(ExtentTest logInfo, String logInfoMsg, By guide) throws IOException {
+        WebElement element_node = driver.findElement(guide);
+        Utils.highlightElement(element_node);
+        logInfo.addScreenCaptureFromPath(captureScreenShot(driver));
+    }
+
+    //For searching the element and click
+    public static void searchandclick(WebElement path){
+        int i=1;
+        while (i==1){
+            try{
+                path.click();
+                i=0;
+            }
+            catch (Exception e){
+                JavascriptExecutor jse = (JavascriptExecutor)driver;
+                jse.executeScript("arguments[0].scrollIntoView()", path);
+            }
+        }
+    }
+
     public static void switchFrame(WebElement frameElement){
 
         while (!frameElement.isDisplayed()){
