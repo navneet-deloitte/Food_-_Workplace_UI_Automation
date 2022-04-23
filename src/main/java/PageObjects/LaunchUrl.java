@@ -28,4 +28,12 @@ public class LaunchUrl extends BaseClass {
         Log.info("Url Launched Successfully...");
     }
 
+    public void login() {
+        driver.findElement(By.xpath("//a[contains(text(),'Login')]")).click();
+        driver.findElement(By.xpath("//a[contains(text(),'Login Here')]")).click();
+        driver.findElement(By.xpath("//input[@type=\"email\"]")).sendKeys("admin@deloitte.com");
+        driver.findElement(By.xpath("//input[@type=\"password\"]")).sendKeys("admin");
+        driver.findElement(By.xpath("//button[contains(text(),'Login')]")).click();
+    }
+
 }

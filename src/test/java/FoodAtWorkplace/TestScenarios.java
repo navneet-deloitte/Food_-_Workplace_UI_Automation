@@ -1,5 +1,6 @@
 package FoodAtWorkplace;
 import PageObjects.LaunchUrl;
+import PageObjects.UpdateMenuPage;
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.Status;
@@ -17,25 +18,48 @@ public class TestScenarios extends BaseClass {
     LaunchUrl launchUrl = new LaunchUrl();
 
 //    @BeforeClass(groups = {"smoke","regression","functional"})
-    @Test
+    @Test(priority = 1)
     public void launchUrl() throws IOException {
 
         test=extent.createTest("Launch Url");
         launchUrl.getUrl(test);
         Utils.maximizePage();
         Utils.deleteAllCookies();
-        Utils.implicitWait(30);
+        Utils.implicitWait(5);
 
     }
 
 
     // TODO add all scenarios and test cases here
 
-    @Test
-    public void Test1(){
-        ExtentTest extentTest = extent.createTest("Test 1");
+    @Test(priority = 2)
+    public void login(){
+        ExtentTest extentTest = extent.createTest("Login");
 
         extentTest.log(Status.PASS,"Success");
+
+        launchUrl.login();
+
+        extentTest.log(Status.FAIL,"login then Fail");
+
+    }
+
+    @Test(priority = 3)
+    public void editItem(){
+        ExtentTest extentTest = extent.createTest("Edit Item");
+
+        UpdateMenuPage.clickUpdateMenuBtn();
+        System.out.println("clickUpdateMenuBtn");
+        UpdateMenuPage.clickEditItemBtn();
+        System.out.println("clickEditItemBtn");
+
+        driver.switchTo().activeElement();
+        System.out.println("Frame switched");
+        UpdateMenuPage.clickAddBtn();
+        System.out.println("Edit");
+//        UpdateMenuPage.editPrice();
+//        System.out.println("edit price");
+
     }
 
 

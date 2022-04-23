@@ -13,7 +13,8 @@ public class UpdateMenuPage extends BaseClass {
 
     public static By updateMenuBtn = By.xpath("//a[contains(@class,'history ng-star-inserted')and text()='Update Menu']");
     public static By addItemBtn = By.xpath("//a[contains(@class,'btn button')]");
-    public static By addItemFrame = By.xpath("//a[contains(@class,'cdk-overlay-pane')]");
+    public static By editItemBtn = By.xpath("//button[contains(@class,'btn edit')]");
+    public static By addItemFrame = By.xpath("//div[contains(@class,'cdk-overlay-pane')]");
 
     public static By name = By.xpath("//input[@formcontrolname,'name']");
     public static By price = By.xpath("//input[@formcontrolname,'price']");
@@ -21,7 +22,7 @@ public class UpdateMenuPage extends BaseClass {
     public static By duration = By.xpath("//input[@formcontrolname,'duration']");
     public static By imageUrl = By.xpath("//input[@formcontrolname,'image']");
 
-    public static By addBtn = By.xpath("//button[@class,'btn add ng-star-inserted']");
+    public static By addBtn = By.xpath("//button[contains(@class,'btn add ng-star-inserted')]");
     public static By cancelBtn = By.xpath("//button[contains(@class,'btn') and text() = 'Cancel']");
 
     public static By categoryDropDown = By.xpath("//select[@class,'category']");
@@ -43,8 +44,11 @@ public class UpdateMenuPage extends BaseClass {
     public static void clickAddItemBtn() {
         driver.findElement(addItemBtn).click();
     }
+    public static void clickEditItemBtn() {
+        driver.findElement(editItemBtn).click();
+    }
 
-        public static void switchAddItemFrame(){
+    public static void switchAddItemFrame(){
 
         WebElement frame = driver.findElement(addItemFrame);
 
@@ -98,9 +102,19 @@ public class UpdateMenuPage extends BaseClass {
             itemList.get(indexOfItem).findElement(availabilityToggle).click();
         }
         else{
-            // log error
+            // TODO log error
         }
     }
+
+    public static void editPrice(){
+        driver.findElement(price).sendKeys("45");
+
+    }
+
+    public static void editItem(){
+
+    }
+
 
 
 
