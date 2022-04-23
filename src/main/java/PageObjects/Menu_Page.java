@@ -20,7 +20,7 @@ public class Menu_Page extends BaseClass {
     static By orderHistoryButton = By.xpath("//a[contains(text(),'Order History')]");
     static By profileIcon = By.xpath("//mat-icon[contains(text(),'account_circle')]");
     static By logoutButton=By.xpath("//i[@class='fa fa-sign-out']");
-    static By AllItemsInOnTheHouse = By.xpath("//div[contains(@class,'itemname')]");
+    static By AllItems= By.xpath("//div[contains(@class,'itemname')]");
     static By Add_button = By.xpath("//div[@class='addbuttons']");
     static By items_cart=By.xpath("//div[@class='cent1']");
     static By item_count_cart=By.xpath("//div[@class='col-1 cent']");
@@ -113,13 +113,13 @@ public class Menu_Page extends BaseClass {
 
 
     public static void delete_items(String location) throws IOException {
-        List<List<String>> itemsDataInOnTheHouse = HandleCSV.newFileOperation(location);
-        List<WebElement> fooditems = driver.findElements(AllItemsInOnTheHouse);
+        List<List<String>> itemsData = HandleCSV.newFileOperation(location);
+        List<WebElement> fooditems = driver.findElements(AllItems);
         Log.info("Deleting the items in cart");
-        for (int i = 0;i<itemsDataInOnTheHouse.size();i++) {
+        for (int i = 0;i<itemsData.size();i++) {
             for (int j = 0; j < fooditems.size(); j++) {
-                if (fooditems.get(j).getText().equals(itemsDataInOnTheHouse.get(i).get(0))) {
-                    int item_count=Integer.parseInt(itemsDataInOnTheHouse.get(i).get(1));
+                if (fooditems.get(j).getText().equals(itemsData.get(i).get(0))) {
+                    int item_count=Integer.parseInt(itemsData.get(i).get(1));
                     int Food_item_place=j+1;
                     try {
                         while (item_count > 0) {
@@ -223,14 +223,14 @@ public class Menu_Page extends BaseClass {
 
 
     public static void add_items(String location) throws IOException {
-        List<List<String>> itemsDataInOnTheHouse = HandleCSV.newFileOperation(location);
-        List<WebElement> fooditems = driver.findElements(AllItemsInOnTheHouse);
+        List<List<String>> itemsData = HandleCSV.newFileOperation(location);
+        List<WebElement> fooditems = driver.findElements(AllItems);
         List<WebElement> Add = driver.findElements(Add_button);
         Log.info("Adding the items to cart");
-        for (int i = 0;i<itemsDataInOnTheHouse.size();i++){
+        for (int i = 0;i<itemsData.size();i++){
             for(int j=0;j<fooditems.size();j++){
-                if(fooditems.get(j).getText().equals(itemsDataInOnTheHouse.get(i).get(0))){
-                    int item_count = Integer.parseInt(itemsDataInOnTheHouse.get(i).get(1));
+                if(fooditems.get(j).getText().equals(itemsData.get(i).get(0))){
+                    int item_count = Integer.parseInt(itemsData.get(i).get(1));
                     int Food_item_place = j + 1;
                     while (item_count > 0){
                         try{
