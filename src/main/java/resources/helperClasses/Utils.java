@@ -297,20 +297,6 @@ public class Utils extends BaseClass
         logInfo.addScreenCaptureFromPath(captureScreenShot(driver));
     }
 
-    public static void extentScreenShotCapture(ExtentTest logInfo,String logInfoMsg,By guide) throws IOException
-    {
-        WebElement element_node = driver.findElement(guide);
-        Utils.highlightElement(element_node);
-        logInfo.pass(logInfoMsg);
-        logInfo.addScreenCaptureFromPath(captureScreenShot(driver));
-    }
-
-    public static void highlightElement(WebElement guide)
-    {
-        JavascriptExecutor executor = (JavascriptExecutor)driver;
-        executor.executeScript("arguments[0].style.border='2px solid red'", guide);
-    }
-
     public static void scrollDown()
     {
         Actions action = new Actions(driver);
