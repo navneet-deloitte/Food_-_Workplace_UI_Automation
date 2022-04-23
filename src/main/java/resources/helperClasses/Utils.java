@@ -1,5 +1,7 @@
 package resources.helperClasses;
 import com.aventstack.extentreports.ExtentTest;
+import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Actions;
 import com.aventstack.extentreports.Status;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -293,6 +295,12 @@ public class Utils extends BaseClass
     public static void extentScreenShotCapture(ExtentTest logInfo,String logInfoMsg) throws IOException {
         logInfo.pass(logInfoMsg);
         logInfo.addScreenCaptureFromPath(captureScreenShot(driver));
+    }
+
+    public static void scrollDown()
+    {
+        Actions action = new Actions(driver);
+        action.sendKeys(Keys.PAGE_DOWN).build().perform();    //scroll down a page
     }
 
     public static void highlightElement(WebElement guide)
