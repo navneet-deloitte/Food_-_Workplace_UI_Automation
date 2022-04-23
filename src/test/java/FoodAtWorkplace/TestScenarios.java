@@ -48,6 +48,8 @@ public class TestScenarios extends BaseClass {
     public void editItem(){
         ExtentTest extentTest = extent.createTest("Edit Item");
 
+        UpdateMenuPage.usedItem();
+
         UpdateMenuPage.clickUpdateMenuBtn();
         System.out.println("clickUpdateMenuBtn");
         UpdateMenuPage.clickEditItemBtn();
@@ -55,10 +57,13 @@ public class TestScenarios extends BaseClass {
 
         driver.switchTo().activeElement();
         System.out.println("Frame switched");
-        UpdateMenuPage.clickAddBtn();
-        System.out.println("Edit");
-//        UpdateMenuPage.editPrice();
-//        System.out.println("edit price");
+
+
+        UpdateMenuPage.editItemDetails();
+        System.out.println("edit item");
+
+//        UpdateMenuPage.clickAddBtn();
+//        System.out.println("Edit");
 
     }
 
@@ -67,6 +72,6 @@ public class TestScenarios extends BaseClass {
     @AfterClass(groups = {"smoke","regression","functional"})
     public void tearDown()
     {
-        driver.quit();
+//        driver.quit();
     }
 }

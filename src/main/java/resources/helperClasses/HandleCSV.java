@@ -139,13 +139,12 @@ public class HandleCSV {
         return result;
     }
 
-    public static ArrayList<Item> getItems(){
+    public static ArrayList<Item> getItemsDetails(String filePath){
 
-        String itemListPath = "src/main/java/resources/datasheets/itemsData.csv";
         try {
             String line = "";
             ArrayList<Item> itemList = new ArrayList<>();
-            File file = new File(itemListPath);
+            File file = new File(filePath);
             BufferedReader br = new BufferedReader(new FileReader(file));
             while ((line = br.readLine()) != null) {
                 String[] products = line.split(",");

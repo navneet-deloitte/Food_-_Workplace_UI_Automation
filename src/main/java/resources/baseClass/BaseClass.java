@@ -6,13 +6,15 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import resources.helperClasses.Utils;
 import testAutomationListner.ExtentReportListener;
+import testAutomationListner.Log;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
 public class BaseClass extends ExtentReportListener {
     public static WebDriver driver;
-    public Properties properties;
+    public static Properties properties;
     public static ExtentTest test;
 
 
