@@ -39,20 +39,23 @@ public class  UserRegister extends BaseClass {
 
     // This method is for new user register
     public static void register(ExtentTest test) throws InterruptedException, IOException {
+
         logInfo = test.createNode("register");
         ((JavascriptExecutor) driver).executeScript("window.open()");
         ArrayList<String> tabs = new ArrayList<String>(driver.getWindowHandles());
+        //open website to generate a random email and store that email
         driver.switchTo().window(tabs.get(1));
         driver.get("https://fakermail.com/");
         driver.findElement(random_email).click();
         Log.info("Generated random email");
         String random_email=driver.findElement(get_random_mail).getAttribute("placeholder");
+        //switch to food@workplace, goto login page, enter that email and click on conform button
         driver.switchTo().window(tabs.get(0));
-        driver.findElement(Login_Page).click();
         driver.findElement(mail).sendKeys(random_email);
         Log.info("Entered generated random mail");
         driver.findElement(verify_email).click();
         Log.info("clicked on conform");
+        //switch to fakermail site, open mail containing otp and store that otp
         driver.switchTo().window(tabs.get(1));
         Utils.wait(4000);
         Utils.implicitWait(7);
@@ -61,6 +64,7 @@ public class  UserRegister extends BaseClass {
         Log.info("opened Mail containing OTP");
         String otp_generated=driver.findElement(read_otp).getText();
         String otp = otp_generated.substring(9,otp_generated.length());
+        //switch tab, enter otp, and click on verify button
         driver.switchTo().window(tabs.get(0));
         driver.findElement(otpField).sendKeys(otp);
         Log.info("OTP entered");
@@ -70,22 +74,51 @@ public class  UserRegister extends BaseClass {
         Utils.wait(10000);
         Actions act =  new Actions(driver);
         act.moveToElement(driver.findElement(verifyButton)).click().perform();
-        Log.info("OTP verified");
-        Utils.wait(5000);
-        driver.findElement(passwordField).sendKeys(password);
-        Log.info("Password entered");
-        driver.findElement(loginButton).click();
-        Log.info("Login button clicked");
-        Utils.extentScreenShotCapture(logInfo,"Register Successful", menuText);
-        String menu = driver.findElement(menuText).getText();
-        Assert.assertTrue(menu.contains("Menu"));
-        Log.info("Email registered successfully");
+        if(driver.findElement(passwordField).isDisplayed()){
+            Log.info("OTP verified");
+            //enter password and click on login button
+            Utils.wait(5000);
+            driver.findElement(passwordField).sendKeys(password);
+            Log.info("Password entered");
+            driver.findElement(loginButton).click();
+            Log.info("Login button clicked");
+            Utils.extentScreenShotCapture(logInfo,"Register Successful", menuText);
+            //validating that registration is successful
+            String menu = driver.findElement(menuText).getText();
+            Assert.assertTrue(menu.contains("Menu"));
+            Log.info("Email registered successfully");
+            //writing the email and password to a csv file
+            FileInputStream fileInputStream=new FileInputStream(System.getProperty("user.dir")+propertyFile);
+            properties=new Properties();
+            properties.load(fileInputStream);
+            String RegisterDataFIle = properties.getProperty("register_data_file");
+            HandleCSV.writeData(RegisterDataFIle,random_email,password);
+        }else{
+            act.moveToElement(driver.findElement(verifyButton)).click().perform();
+            Log.info("OTP verified");
+            //enter password and click on login button
+            Utils.wait(5000);
+            driver.findElement(passwordField).sendKeys(password);
+            Log.info("Password entered");
+            driver.findElement(loginButton).click();
+            Log.info("Login button clicked");
+            Utils.extentScreenShotCapture(logInfo,"Register Successful", menuText);
+            //validating that registration is successful
+            String menu = driver.findElement(menuText).getText();
+            Assert.assertTrue(menu.contains("Menu"));
+            Log.info("Email registered successfully");
+            //writing the email and password to a csv file
+            FileInputStream fileInputStream=new FileInputStream(System.getProperty("user.dir")+propertyFile);
+            properties=new Properties();
+            properties.load(fileInputStream);
+            String RegisterDataFIle = properties.getProperty("register_data_file");
+            HandleCSV.writeData(RegisterDataFIle,random_email,password);
+        }
 
-        FileInputStream fileInputStream=new FileInputStream(System.getProperty("user.dir")+propertyFile);
-        properties=new Properties();
-        properties.load(fileInputStream);
-        String RegisterDataFIle = properties.getProperty("register_data_file");
-        HandleCSV.writeData(RegisterDataFIle,random_email,password);
 
+    }
+
+    public static void clickLoginBtn(){
+        driver.findElement(Login_Page).click();
     }
 }

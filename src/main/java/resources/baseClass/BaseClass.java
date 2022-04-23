@@ -4,7 +4,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
-import resources.helperClasses.Utils;
 import testAutomationListner.ExtentReportListener;
 import java.io.FileInputStream;
 import java.io.IOException;

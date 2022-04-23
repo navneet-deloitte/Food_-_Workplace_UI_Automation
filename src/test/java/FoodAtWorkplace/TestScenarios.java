@@ -35,10 +35,6 @@ public class TestScenarios extends BaseClass {
 
     @Test
     public void Test1() throws IOException, InterruptedException {
-        UserRegister.register(test);
-//        AdminLogin.goto_login_page();
-//        AdminLogin.loginHereFunctionality();
-//        AdminLogin.invalid_login(test);
         ExtentTest extentTest = extent.createTest("Test 1");
 
         extentTest.log(Status.PASS,"Success");
