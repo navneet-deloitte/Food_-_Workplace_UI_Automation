@@ -1,7 +1,5 @@
 package FoodAtWorkplace;
-import PageObjects.AdminLogin;
 import PageObjects.LaunchUrl;
-import PageObjects.UserRegister;
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.Status;
@@ -31,10 +29,11 @@ public class TestScenarios extends BaseClass {
 
     }
 
+
     // TODO add all scenarios and test cases here
 
     @Test
-    public void Test1() throws IOException, InterruptedException {
+    public void Test1(){
         ExtentTest extentTest = extent.createTest("Test 1");
 
         extentTest.log(Status.PASS,"Success");
