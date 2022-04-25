@@ -1,6 +1,7 @@
 package PageObjects;
 
 import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.Status;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
@@ -10,6 +11,7 @@ import resources.helperClasses.Utils;
 import testAutomationListner.Log;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Menu_Page extends BaseClass {
@@ -33,6 +35,7 @@ public class Menu_Page extends BaseClass {
     static By order_status=By.xpath("//div[@class='row order-details']");
     static By order_saved=By.xpath("//div[contains(text(),'The order is saved')]");
     static By orderplaced=By.xpath("//div[contains(text(),'Order Placed')]");
+    static By itemDiv = By.xpath("//div[contains(@class,'card-body')]");
 
 
 
@@ -46,7 +49,7 @@ public class Menu_Page extends BaseClass {
         Utils.searchandclick(driver.findElement(onTheHouse));
     }
 
-    public static void clickOnYou(ExtentTest test) {
+    public static void clickOnYou() {
         WebElement on_you=driver.findElement(onYou);
         Utils.searchandclick(on_you);
     }
@@ -66,6 +69,15 @@ public class Menu_Page extends BaseClass {
         Utils.searchandclick(cart);
     }
 
+    public static void hoverCardItem(){
+        Utils.hover(itemDiv);
+    }
+
+    public static void scrollToTop(){
+        WebElement loginButtonElement = driver.findElement(loginButton);
+        Utils.scrollUpTo(loginButtonElement);
+    }
+
     public static void clickLoginButton(ExtentTest test) {
         Utils.searchandclick(driver.findElement(loginButton));
     }
@@ -80,12 +92,12 @@ public class Menu_Page extends BaseClass {
         driver.findElement(logoutButton).click();
     }
 
-    public static void addToCartFunctionality(ExtentTest test) throws InterruptedException, IOException {
+    public static void addToCartFunctionality(ExtentTest test){
         logInfo=test.createNode("Adding items to cart");
         clickOnTheHouseFunctionality();
         Utils.wait(2000);
         add_items(pathOnTheHouse);
-        clickOnYou(test);
+        clickOnYou();
         Utils.wait(2000);
         add_items(pathOnYou);
         clickCartButton();
@@ -99,7 +111,7 @@ public class Menu_Page extends BaseClass {
         clickOnTheHouseFunctionality();
         Utils.wait(3000);
         delete_items(pathOnTheHouse);
-        clickOnYou(test);
+        clickOnYou();
         Utils.wait(3000);
         delete_items(pathOnYou);
         clickCartButton();
@@ -136,12 +148,22 @@ public class Menu_Page extends BaseClass {
         }
     }
 
-    public static void cart_validation(ExtentTest test) throws IOException, InterruptedException {
+    public static void cart_validation(ExtentTest test){
         logInfo=test.createNode("Validating cart");
         clickCartButton();
         Log.info("Validating the cart");
-        List<List<String>> itemsDataInOnTheHouse = HandleCSV.newFileOperation(pathOnTheHouse);
-        List<List<String>> itemsDataInOnYou = HandleCSV.newFileOperation(pathOnYou);
+        List<List<String>> itemsDataInOnTheHouse;
+        List<List<String>> itemsDataInOnYou;
+
+        try {
+            itemsDataInOnTheHouse = HandleCSV.newFileOperation(pathOnTheHouse);
+            itemsDataInOnYou = HandleCSV.newFileOperation(pathOnYou);
+        }catch (IOException ioException){
+            Log.error("Fail to read CSV file "+ioException.getMessage());
+            logInfo.log(Status.FAIL,"Fail to read CSV file "+ioException.getMessage());
+            return;
+        }
+
         int total_cart_value=0,Onhouse_count=0,Onyou_count=0;
         int total_items=itemsDataInOnTheHouse.size()+itemsDataInOnYou.size();
         try {
@@ -222,8 +244,15 @@ public class Menu_Page extends BaseClass {
 
 
 
-    public static void add_items(String location) throws IOException {
-        List<List<String>> itemsData = HandleCSV.newFileOperation(location);
+    public static void add_items(String location){
+        List<List<String>> itemsData = new ArrayList<>();
+        try {
+            itemsData = HandleCSV.newFileOperation(location);
+        }catch (IOException ioException){
+            Log.error("Fail to read CSV file "+ioException.getMessage());
+            logInfo.log(Status.FAIL,"Fail to read CSV file "+ioException.getMessage());
+            return;
+        }
         List<WebElement> fooditems = driver.findElements(AllItems);
         List<WebElement> Add = driver.findElements(Add_button);
         Log.info("Adding the items to cart");
@@ -247,4 +276,6 @@ public class Menu_Page extends BaseClass {
             }
         }
     }
+
+
 }

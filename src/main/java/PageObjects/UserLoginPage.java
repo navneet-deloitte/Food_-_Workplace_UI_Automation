@@ -1,6 +1,7 @@
 package PageObjects;
 
 import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.Status;
 import org.openqa.selenium.By;
 import org.testng.Assert;
 
@@ -10,6 +11,7 @@ import resources.helperClasses.Utils;
 import testAutomationListner.Log;
 
 import java.io.IOException;
+import java.util.Properties;
 
 public class UserLoginPage extends BaseClass {
     static By logo=By.xpath("//img[@class='logo-img']");
@@ -24,18 +26,19 @@ public class UserLoginPage extends BaseClass {
     static By cart_empty=By.xpath("//div[@class='ng-star-inserted']/div[2]/div[1]");
     static By Admin_login=By.xpath("//a[contains(text(),'Login Here')]");
     static By cartButton = By.xpath("//a[contains(text(),'Cart')]");
+    static By toastMsg = By.xpath("//div[contains(@class,'toast-bottom-right toast-container')]");
 
 
 
 
-    public static String loginData_csv = "src\\main\\java\\resources\\datasheets\\logindata.csv";
     public static String Invalid_login_csv="src/main/java/resources/datasheets/Invalid_login_details.csv";
-    public static ExtentTest logInfo=null;
+    public static ExtentTest logInfo;
     public static String loginDetails;
 
 
 
     public static void goto_login_page(){
+        driver.get(properties.getProperty("baseUrl"));
         Utils.searchandclick(driver.findElement(Login_Page));
     }
 
@@ -45,27 +48,27 @@ public class UserLoginPage extends BaseClass {
 
 
     //    This method is for successful login with valid credentials
-    public static void valid_login(ExtentTest test) throws IOException {
+    public static void valid_login(ExtentTest test){
         logInfo=test.createNode("userLogin_Valid");
         Log.info("Reading login data from csv file...");
-        loginDetails= HandleCSV.readFromLast(loginData_csv);
-        String[] credentials=loginDetails.split(",");
-        Utils.refreshPage();
-        Log.info("Entering emailId...");
-        driver.findElement(mail).sendKeys(credentials[0]);
-        Log.info("Confirming the Mail id");
-        driver.findElement(verify_email).click();
-        Log.info("Entering password...");
-        driver.findElement(password).sendKeys(credentials[1]);
-        Log.info("Clicking on Login");
-        driver.findElement(login).click();
-        driver.findElement(success);
+
+        String userDetailsFilePath = properties.getProperty("user_loginData_csv");
+
+        loginDetails= HandleCSV.readFromLast(userDetailsFilePath);
+
+        if(loginDetails.isEmpty()){
+            logInfo.error("Can't read User details file.");
+            return;
+        }
+
+        fillLoginDetails(loginDetails);
+
         logInfo.pass("Login success");
-        Utils.extentScreenShotCapture(logInfo,"Login Successfull",success);
+        Utils.extentScreenShotCapture(logInfo,"Login Successfully",toastMsg);
     }
 
 
-    public static void verify_logo(ExtentTest test) throws IOException {
+    public static void verify_logo(ExtentTest test){
         logInfo=test.createNode("Logo verification");
         boolean logo_status=driver.findElement(logo).isDisplayed();
         try{
@@ -101,10 +104,27 @@ public class UserLoginPage extends BaseClass {
 
 
     //    This method is for Invalid login with invalid credentials
-    public static void invalid_login(ExtentTest test) throws IOException {
-        logInfo=test.createNode("Invalid_Login");
+    public static void invalid_login(ExtentTest test){
+        logInfo=test.createNode("Invalid Login Test");
         Log.info("Reading login data from csv file...");
-        loginDetails= HandleCSV.readFromLast(Invalid_login_csv);
+
+        loginDetails= HandleCSV.readFromLast(properties.getProperty("invalid_user_login_csv"));
+
+        if(loginDetails.isEmpty()){
+            logInfo.error("Can't read User details file.");
+            return;
+        }
+
+        fillLoginDetails(loginDetails);
+
+
+        driver.findElement(failed);
+        logInfo.fail("Login failed for invalid credentials");
+        Utils.highlightElementYellow(toastMsg);
+        Utils.extentScreenShotCapture(logInfo,"Login Failed");
+    }
+
+    private static void fillLoginDetails(String loginDetails) {
         String[] credentials=loginDetails.split(",");
         Utils.refreshPage();
         Log.info("Entering emailId...");
@@ -113,10 +133,9 @@ public class UserLoginPage extends BaseClass {
         driver.findElement(verify_email).click();
         Log.info("Entering password...");
         driver.findElement(password).sendKeys(credentials[1]);
+
         Log.info("Clicking on Login");
         driver.findElement(login).click();
-        driver.findElement(failed);
-        logInfo.pass("Login failed for invalid credentials");
-        Utils.extentScreenShotCapture(logInfo,"Login Failed",failed);
+
     }
 }

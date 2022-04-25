@@ -21,11 +21,7 @@ public class Utils extends BaseClass
     public static String[] userList;
 
     static{
-        try {
-            userList = HandleCSV.fileOperation(userDetailsFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        userList = HandleCSV.fileOperation(userDetailsFile);
     }
 
     /*This method is to apply implicit wait
@@ -111,6 +107,10 @@ public class Utils extends BaseClass
     public static void scrollUp()
     {
         ((JavascriptExecutor) driver).executeScript("window.scrollTo(document.body.scrollHeight, 0)");
+    }
+
+    public static void scrollUpTo(WebElement webElement){
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", webElement);
     }
 
     /*
@@ -282,17 +282,26 @@ public class Utils extends BaseClass
     }
 
     /*To wait for certain seconds*/
-    public static void wait(int timeInSeconds) throws InterruptedException {
-        Thread.sleep(timeInSeconds);
+    public static void wait(int timeInMilliSeconds){
+        try {
+            Thread.sleep(timeInMilliSeconds);
+        }catch (InterruptedException e){
+            Log.error(e.getMessage());
+        }
     }
 
     /*To capture screenshort and append it to extent report
      *@param logInfo is the first parameter in extentScreenShotCapture
      * @param logInfoMsg is the second parameter in extentScreenShotCapture
      */
-    public static void extentScreenShotCapture(ExtentTest logInfo,String logInfoMsg) throws IOException {
-        logInfo.pass(logInfoMsg);
-        logInfo.addScreenCaptureFromPath(captureScreenShot(driver));
+    public static void extentScreenShotCapture(ExtentTest logInfo,String logInfoMsg){
+        try {
+            logInfo.log(Status.PASS,logInfoMsg);
+            logInfo.addScreenCaptureFromPath(captureScreenShot(driver));
+        }catch (IOException ioException){
+            Log.error("Failed to captured screenshot "+ioException.getMessage());
+            logInfo.log(Status.FAIL,"Failed to captured screenshot "+ioException.getMessage());
+        }
     }
 
     public static void scrollDown()
@@ -307,11 +316,27 @@ public class Utils extends BaseClass
         executor.executeScript("arguments[0].style.border='2px solid red'", guide);
 
     }
+    public static void highlightElementYellow(By guide)
+    {
+        waitForVisibilityOfElements(guide,1);
 
-    public static void extentScreenShotCapture(ExtentTest logInfo, String logInfoMsg, By guide) throws IOException {
+        JavascriptExecutor executor = (JavascriptExecutor)driver;
+        executor.executeScript("arguments[0].style.border='2px solid yellow'", driver.findElement(guide));
+
+    }
+
+    public static void extentScreenShotCapture(ExtentTest logInfo, String logInfoMsg, By guide){
+        waitForVisibilityOfElements(guide,1);
         WebElement element_node = driver.findElement(guide);
-        Utils.highlightElement(element_node);
-        logInfo.addScreenCaptureFromPath(captureScreenShot(driver));
+        try {
+            Utils.highlightElement(element_node);
+            logInfo.log(Status.PASS,logInfoMsg);
+            logInfo.addScreenCaptureFromPath(captureScreenShot(driver));
+        }catch (IOException ioException){
+            Log.error("Failed to captured screenshot "+ioException.getMessage());
+            logInfo.log(Status.FAIL,"Failed to captured screenshot "+ioException.getMessage());
+        }
+
     }
 
     //For searching the element and click
@@ -328,8 +353,13 @@ public class Utils extends BaseClass
             }
         }
     }
-    public static void scrollDown(){
+
+    public static void hover(By xpath){
+        WebElement ele = driver.findElement(xpath);
+
         Actions action = new Actions(driver);
-        action.sendKeys(Keys.PAGE_DOWN).build().perform();    //scroll down a page
+
+        action.moveToElement(ele).perform();
+
     }
 }

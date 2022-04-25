@@ -1,5 +1,7 @@
 package resources.helperClasses;
 import org.apache.commons.io.input.ReversedLinesFileReader;
+import testAutomationListner.Log;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,15 +12,16 @@ public class HandleCSV {
     /*This method is to read single line from the start of csv file
      *@param file_path is the first parameter in fileOperation
      */
-    public static String[] fileOperation(String file_path) throws IOException {
+    public static String[] fileOperation(String file_path){
         try {
                 File file=new File(file_path);
                 BufferedReader br=new BufferedReader(new FileReader(file));
                 String[] workerDetails=br.readLine().split(",");
                 return workerDetails;
-            }
-        catch (FileNotFoundException e) {
-                System.out.println("File not found! check the correct file path.");
+            }catch (FileNotFoundException fileNotFoundException) {
+                Log.error("File not found! check the correct file path." + fileNotFoundException.getMessage());
+            }catch (IOException ioException){
+                Log.error("Can't read the file data." + ioException.getMessage());
             }
           return null;
     }
@@ -26,7 +29,7 @@ public class HandleCSV {
     /*This method is read last line from csv file
      *@param file_path is the first parameter in readFromLast
      */
-    public static String readFromLast(String filePath) throws IOException {
+    public static String readFromLast(String filePath) {
         String last="", line;
         try
         {
@@ -37,11 +40,12 @@ public class HandleCSV {
                     last = line;
             }
             return last;
+        }catch (FileNotFoundException fileNotFoundException) {
+            Log.error("File not found! check the correct file path." + fileNotFoundException.getMessage());
+        }catch (IOException ioException){
+            Log.error("Can't read the file data." + ioException.getMessage());
         }
-        catch (FileNotFoundException e) {
-            System.out.println("File not found! check the correct file path.");
-        }
-        return null;
+        return "";
 
     }
 

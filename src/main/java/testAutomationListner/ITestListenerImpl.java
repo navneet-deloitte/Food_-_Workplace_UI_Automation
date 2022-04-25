@@ -13,7 +13,6 @@ import java.io.IOException;
 
 public class ITestListenerImpl extends BaseClass implements ITestListener
 {
-	public static ExtentReports extent;
 	ExtentTest testcase;
 
 	public void onTestStart(ITestResult result) {
@@ -27,7 +26,7 @@ public class ITestListenerImpl extends BaseClass implements ITestListener
 	public void onTestFailure(ITestResult result) {
 
 		testcase.log(Status.FAIL, "Test is failed");
-		extent.flush();
+//		extent.flush();
 		ExtentReportListener extentReportListener=new ExtentReportListener();
 		try {
 			extentReportListener.captureScreenShot(driver);
