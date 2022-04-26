@@ -46,24 +46,18 @@ public class TestScenarios extends BaseClass {
 
     @Test(priority = 3)
     public void editItem(){
-        ExtentTest extentTest = extent.createTest("Edit Item");
+        ExtentTest extentTest = extent.createTest("Edit Item Test");
 
-        UpdateMenuPage.usedItem();
 
         UpdateMenuPage.clickUpdateMenuBtn();
         System.out.println("clickUpdateMenuBtn");
-        UpdateMenuPage.clickEditItemBtn();
-        System.out.println("clickEditItemBtn");
 
-        driver.switchTo().activeElement();
-        System.out.println("Frame switched");
-
-
-        UpdateMenuPage.editItemDetails();
+        UpdateMenuPage.editItemDetails(extentTest);
         System.out.println("edit item");
 
-//        UpdateMenuPage.clickAddBtn();
-//        System.out.println("Edit");
+
+        UpdateMenuPage.fillCompleteData(test);
+        System.out.println("Add new Item");
 
     }
 

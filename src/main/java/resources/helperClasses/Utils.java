@@ -340,4 +340,8 @@ public class Utils extends BaseClass
 
         driver.switchTo().frame(frameElement);
     }
+
+    public static void scrollUpTo(WebElement webElement){
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", webElement);
+    }
 }
