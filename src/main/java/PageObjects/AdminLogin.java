@@ -16,31 +16,26 @@ public class AdminLogin extends BaseClass {
     static By failedMessage = By.xpath("//div[contains(text(),'Admin Unauthorized')]");
     static By successMessage = By.xpath("//div[contains(text(),'Success')]");
     static By userLogin = By.xpath("//a[contains(text(),'Login Here')]");
-    static By adminLoginPage = By.xpath("//a[contains(text(),'Login Here')]");
+    static By adminLoginPage = By.xpath("//a[contains(@class,'link2') and contains(text(),'Login Here')]");
 
     public static ExtentTest logInfo = null;
     public static String loginDetails;
 
-    static String Invalid_login_csv = properties.getProperty("Invalid_login_csv");
-    static String loginData_csv = properties.getProperty("loginData_csv");
+    static String Invalid_login_csv = properties.getProperty("admin_invalid_login_csv");
+    static String loginData_csv = properties.getProperty("admin_login_data_csv");
 
 
     //    This method is for successful login with valid credentials
-    public static void login(ExtentTest test) throws IOException
-    {
-        logInfo = test.createNode("userLogin");
-        Log.info("Reading login data from csv file...");
-        loginDetails = HandleCSV.readFromLast(loginData_csv);
-        String[] credentials = loginDetails.split(",");
-        Log.info("Entering admin mailId...");
-        driver.findElement(mail).sendKeys(credentials[0]);
-        Log.info("Entering password...");
-        driver.findElement(password).sendKeys(credentials[1]);
-        Log.info("Clicking on Login");
-        driver.findElement(login).click();
-        driver.findElement(successMessage);
-        Utils.extentScreenShotCapture(logInfo, "Login Successfull", successMessage);
+    public static void login(ExtentTest test) {
+        logInfo = test.createNode("Valid User Login");
+
+        getAndFillLoginData(loginData_csv);
+
+        Utils.extentScreenShotCapture(logInfo,"Login Successfully",successMessage);
+
     }
+
+
 
     public static void loginHereFunctionality(){
 
@@ -59,20 +54,41 @@ public class AdminLogin extends BaseClass {
 
 
     //    This method is for Invalid login with invalid credentials
-    public static void invalid_login(ExtentTest test) throws IOException
-    {
+    public static void invalid_login(ExtentTest test){
 
-        logInfo=test.createNode("userLogin");
+        logInfo=test.createNode("Invalid User Login");
+
+        getAndFillLoginData(Invalid_login_csv);
+
+        logInfo.fail("Invalid Admin credentials");
+
+        Utils.highlightElement(failedMessage,"blue");
+
+        Utils.extentScreenShotCapture(logInfo,"Login Failed");
+
+    }
+
+
+    public static void getAndFillLoginData(String data_csv) {
+
         Log.info("Reading login data from csv file...");
-        loginDetails= HandleCSV.readFromLast(Invalid_login_csv);
-        String[] credentials=loginDetails.split(",");
-        Log.info("Entering emailId...");
+
+        // get data from csv file
+        loginDetails = HandleCSV.readFromLast(data_csv);
+
+        String[] credentials = loginDetails.split(",");
+
+        Log.info("Entering admin mailId...");
+        driver.findElement(mail).clear();
         driver.findElement(mail).sendKeys(credentials[0]);
         Log.info("Entering password...");
+        driver.findElement(password).clear();
         driver.findElement(password).sendKeys(credentials[1]);
         Log.info("Clicking on Login");
         driver.findElement(login).click();
-        driver.findElement(failedMessage);
-        Utils.extentScreenShotCapture(logInfo,"Login Failed", failedMessage);
+
+        Utils.wait(1000);
+
     }
+
 }

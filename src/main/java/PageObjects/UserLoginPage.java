@@ -3,6 +3,9 @@ package PageObjects;
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.Status;
 import org.openqa.selenium.By;
+import org.openqa.selenium.ElementNotVisibleException;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 
 import resources.baseClass.BaseClass;
@@ -16,7 +19,8 @@ import java.util.Properties;
 public class UserLoginPage extends BaseClass {
     static By logo=By.xpath("//img[@class='logo-img']");
     static By Login_Page=By.xpath("//a[contains(text(),'Login')]");
-    static By mail=By.xpath("//input[@placeholder='Enter Email address']");
+//    static By mail=By.xpath("//input[contains(@class,'form-control input ng-pristine ng-valid ng-touched')]");
+    static By mail=By.xpath("//input[@type = 'email']");
     static By verify_email=By.xpath("//div[@class='verify-btn-div']");
     static By password=By.xpath("//input[@placeholder='Enter Password']");
     static By login=By.xpath("//button[contains(text(),'Login')]");
@@ -27,11 +31,10 @@ public class UserLoginPage extends BaseClass {
     static By Admin_login=By.xpath("//a[contains(text(),'Login Here')]");
     static By cartButton = By.xpath("//a[contains(text(),'Cart')]");
     static By toastMsg = By.xpath("//div[contains(@class,'toast-bottom-right toast-container')]");
+    static By oderHistory = By.xpath("//mat-icon[contains(@class,'history ng-star-inserted')]");
 
 
 
-
-    public static String Invalid_login_csv="src/main/java/resources/datasheets/Invalid_login_details.csv";
     public static ExtentTest logInfo;
     public static String loginDetails;
 
@@ -39,7 +42,12 @@ public class UserLoginPage extends BaseClass {
 
     public static void goto_login_page(){
         driver.get(properties.getProperty("baseUrl"));
-        Utils.searchandclick(driver.findElement(Login_Page));
+        WebElement loginBtnElement = driver.findElement(Login_Page);
+        Utils.searchandclick(loginBtnElement);
+    }
+
+    public static void logout() {
+        Utils.deleteAllCookies();
     }
 
     public static void goto_admin_login(){
@@ -52,7 +60,7 @@ public class UserLoginPage extends BaseClass {
         logInfo=test.createNode("userLogin_Valid");
         Log.info("Reading login data from csv file...");
 
-        String userDetailsFilePath = properties.getProperty("user_loginData_csv");
+        String userDetailsFilePath = properties.getProperty("user_login_data_csv");
 
         loginDetails= HandleCSV.readFromLast(userDetailsFilePath);
 
@@ -61,7 +69,7 @@ public class UserLoginPage extends BaseClass {
             return;
         }
 
-        fillLoginDetails(loginDetails);
+        fillLoginDetails(loginDetails,false);
 
         logInfo.pass("Login success");
         Utils.extentScreenShotCapture(logInfo,"Login Successfully",toastMsg);
@@ -93,8 +101,8 @@ public class UserLoginPage extends BaseClass {
             logInfo.pass("cart is empty");
             Utils.extentScreenShotCapture(logInfo,"cart is empty",cart_empty);
         }
-        catch (Exception e){
-            logInfo.fail("Cart is not empty");
+        catch (AssertionError e){
+            logInfo.fail("Cart is not empty. " + e.getMessage());
             Utils.extentScreenShotCapture(logInfo,"cart is not empty",cart_empty);
         }
         Log.info("Cart is empty");
@@ -108,30 +116,36 @@ public class UserLoginPage extends BaseClass {
         logInfo=test.createNode("Invalid Login Test");
         Log.info("Reading login data from csv file...");
 
-        loginDetails= HandleCSV.readFromLast(properties.getProperty("invalid_user_login_csv"));
+        loginDetails= HandleCSV.readFromLast(properties.getProperty("user_invalid_login_csv"));
 
         if(loginDetails.isEmpty()){
             logInfo.error("Can't read User details file.");
             return;
         }
 
-        fillLoginDetails(loginDetails);
+        fillLoginDetails(loginDetails,true);
 
 
-        driver.findElement(failed);
         logInfo.fail("Login failed for invalid credentials");
-        Utils.highlightElementYellow(toastMsg);
+        Utils.highlightElement(toastMsg,"blue");
         Utils.extentScreenShotCapture(logInfo,"Login Failed");
     }
 
-    private static void fillLoginDetails(String loginDetails) {
+    private static void fillLoginDetails(String loginDetails,Boolean verify) {
         String[] credentials=loginDetails.split(",");
-        Utils.refreshPage();
         Log.info("Entering emailId...");
+        driver.findElement(mail).clear();
         driver.findElement(mail).sendKeys(credentials[0]);
         Log.info("Confirming the Mail id");
-        driver.findElement(verify_email).click();
+        try {
+            driver.findElement(verify_email).click();
+        }catch (NoSuchElementException e){
+            Log.error("Element not found");
+        }catch (Exception e){
+            Log.error("Element not found");
+        }
         Log.info("Entering password...");
+        driver.findElement(password).clear();
         driver.findElement(password).sendKeys(credentials[1]);
 
         Log.info("Clicking on Login");

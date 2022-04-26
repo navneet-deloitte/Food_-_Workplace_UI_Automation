@@ -40,9 +40,9 @@ public class Menu_Page extends BaseClass {
 
 
     public static ExtentTest logInfo = null;
-    public static String pathOnTheHouse = "src/main/java/resources/datasheets/ItemsData-OnTheHouse.csv";
-    static String order_id_file="src/main/java/resources/datasheets/Order_Id.csv";
-    public static String pathOnYou = "src/main/java/resources/datasheets/ItemsData-OnYou.csv";
+    public static String pathOnTheHouse = properties.getProperty("itemsData_OnTheHouse");
+    public static String order_id_file = properties.getProperty("order_id_csv");
+    public static String pathOnYou = properties.getProperty("itemsData_OnYou");
 
 
     public static void clickOnTheHouseFunctionality() {
@@ -82,11 +82,11 @@ public class Menu_Page extends BaseClass {
         Utils.searchandclick(driver.findElement(loginButton));
     }
 
-    public static void clickOrderHistoryButton(ExtentTest test) {
+    public static void clickOrderHistoryButton() {
         Utils.searchandclick(driver.findElement(orderHistoryButton));
     }
 
-    public static void LogoutFunctionality(ExtentTest test) {
+    public static void logoutFunctionality() {
         Utils.searchandclick(driver.findElement(profileIcon));
         Utils.waitForVisibilityOfElements(logoutButton, 10);
         driver.findElement(logoutButton).click();
@@ -96,7 +96,7 @@ public class Menu_Page extends BaseClass {
         logInfo=test.createNode("Adding items to cart");
         clickOnTheHouseFunctionality();
         Utils.wait(2000);
-        add_items(pathOnTheHouse);
+        add_items(properties.getProperty("itemsData_OnTheHouse"));
         clickOnYou();
         Utils.wait(2000);
         add_items(pathOnYou);
@@ -119,10 +119,6 @@ public class Menu_Page extends BaseClass {
         logInfo.pass("Items are deleted from cart");
         Utils.extentScreenShotCapture(logInfo,"Items deleted from cart",entire_cart);
     }
-
-
-
-
 
     public static void delete_items(String location) throws IOException {
         List<List<String>> itemsData = HandleCSV.newFileOperation(location);
@@ -216,7 +212,7 @@ public class Menu_Page extends BaseClass {
     }
 
 
-    public static void placetheorder(ExtentTest test) throws IOException, InterruptedException {
+    public static void placeTheOrder(ExtentTest test){
         logInfo=test.createNode("Placing the order");
         Log.info("Clicking on place the order");
         clickonplaceorder();
@@ -228,18 +224,20 @@ public class Menu_Page extends BaseClass {
         Log.info("Order is saved");
     }
 
-    public static void checkorderstatusandid(ExtentTest test) throws IOException, InterruptedException {
+    public static String checkOrderStatusAndId(ExtentTest test){
         logInfo=test.createNode("Checking order is placed and getting order id");
         logInfo.pass("Order is placed");
         Utils.extentScreenShotCapture(logInfo,"Order Placed",orderplaced);
         Log.info("Order is placed");
         Utils.wait(3000);
         Utils.scrollUp();
-        String id=driver.findElement(get_order_id).getText();
+        String id = driver.findElement(get_order_id).getText();
         Log.info("Storing the Order Id for further refrence");
         HandleCSV.writeJobData(order_id_file,id);
         logInfo.pass("Order id is saved");
         Utils.extentScreenShotCapture(logInfo,"Getting order id",order_status);
+
+        return id;
     }
 
 

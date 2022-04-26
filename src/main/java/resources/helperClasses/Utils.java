@@ -316,12 +316,12 @@ public class Utils extends BaseClass
         executor.executeScript("arguments[0].style.border='2px solid red'", guide);
 
     }
-    public static void highlightElementYellow(By guide)
+    public static void highlightElement(By guide, String color)
     {
         waitForVisibilityOfElements(guide,1);
 
         JavascriptExecutor executor = (JavascriptExecutor)driver;
-        executor.executeScript("arguments[0].style.border='2px solid yellow'", driver.findElement(guide));
+        executor.executeScript("arguments[0].style.border='2px solid "+ color + "'", driver.findElement(guide));
 
     }
 
@@ -362,4 +362,20 @@ public class Utils extends BaseClass
         action.moveToElement(ele).perform();
 
     }
+
+    public static List<List<String>> mergeLists(List<List<String>> parentList, List<List<String>> childList){
+
+        for(List<String> listItem : childList){
+
+            List<String> tobeAdd = new ArrayList<>(listItem);
+
+            parentList.add(tobeAdd);
+
+        }
+
+
+        return parentList;
+    }
+
+
 }

@@ -25,21 +25,22 @@ public class UserOrderStatus extends BaseClass {
     public static By details_button = By.xpath("//div[@class='details-heading']/span");
     public static By confirmation_text = By.xpath("//p[@class='card-text']");
     public static By re_ordered_items = By.xpath("//div[@class='row order-row']/div/span");
+    public static By oderHistoryBtn = By.xpath("//a[contains(text(), 'Order History')] ");
 
     public static ExtentTest logInfo = null;
 
     /* Validating Ordered Food Items in Order Status Page */
-    public static void validatingFoodItemsInOrderStatusPage(ExtentTest test) throws IOException{
+    public static void validatingFoodItemsInOrderStatusPage(ExtentTest test) {
 
         logInfo = test.createNode("Validating the Reordered food Items in Order Status Page");
         Utils.implicitWait(20);
         Utils.scrollDown();
         String confirmation_message = driver.findElement(re_order_confirmation_popup).getText();  /* popup text */
-        Utils.extentScreenShotCapture(logInfo,"ReOrder Confirmation Message",re_order_confirmation_popup);
+        Utils.extentScreenShotCapture(logInfo, "ReOrder Confirmation Message", re_order_confirmation_popup);
         Utils.scrollDown();
         String reOrderconfirmationText = driver.findElement(confirmation_text).getText();        /*Re Order Confirmation Message */
         Log.info(reOrderconfirmationText);
-        Utils.extentScreenShotCapture(logInfo,"Order Status",confirmation_text);
+        Utils.extentScreenShotCapture(logInfo, "Order Status", confirmation_text);
         driver.findElement(details_button).click();                                              /* details button in "Order status" Page */
         Log.info("Clicked On Details Button In Order Status Page");
         List<String> items_in_reordered_cart = new ArrayList<>();
@@ -50,15 +51,18 @@ public class UserOrderStatus extends BaseClass {
                 items_in_reordered_cart.add(itemName);
             }
         }
-        Utils.extentScreenShotCapture(logInfo,"Items in Order Status Page",re_ordered_items);
+        Utils.extentScreenShotCapture(logInfo, "Items in Order Status Page", re_ordered_items);
         Log.info("Fetched the Item names from the Order Status Page");
         Collections.sort(items_in_reordered_cart);
 
         Log.info("Asserting the Reordered Items in Order Status Page");
-        for (int i = 0; i < UserOrderHistory.items_in_cart.size(); i++) {
-            Assert.assertEquals(UserOrderHistory.items_in_cart.get(i).replaceAll(" ", ""), items_in_reordered_cart.get(i).replaceAll(" ", ""));
+
+        if (UserOrderHistory.items_in_cart != null){
+            for (int i = 0; i < UserOrderHistory.items_in_cart.size(); i++) {
+                Assert.assertEquals(UserOrderHistory.items_in_cart.get(i).replaceAll(" ", ""), items_in_reordered_cart.get(i).replaceAll(" ", ""));
+            }
+            Log.info("Successfully validated the Re ordered Food Items in Order Status Page");
         }
-        Log.info("Successfully validated the Re ordered Food Items in Order Status Page");
     }
 
     /* Validing Food status in Order Status Page  */
@@ -78,7 +82,7 @@ public class UserOrderStatus extends BaseClass {
     }
 
     /* Validing Food status in Order Status Page  */
-    public static void validatingFoodStatusCooking(String id, ExtentTest test) throws InterruptedException, IOException {
+    public static void validatingFoodStatusCooking(String id, ExtentTest test){
 
         logInfo = test.createNode("Validating the Status Of Food");
         Utils.wait(3000);
@@ -107,5 +111,9 @@ public class UserOrderStatus extends BaseClass {
         Assert.assertEquals(orderID,id);
         Log.info("Successfully Validated the Food Status in Order Status Page");
 
+    }
+
+    public static void clickOrderHistoryBtn(){
+        driver.findElement(oderHistoryBtn).click();
     }
 }

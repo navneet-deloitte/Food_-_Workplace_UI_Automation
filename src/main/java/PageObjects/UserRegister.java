@@ -20,7 +20,7 @@ import java.util.Properties;
 
 public class  UserRegister extends BaseClass {
 
-    static By Login_Page=By.xpath("//a[contains(@class,'history login ng-star-inserted')]");
+    static By loginBtn=By.xpath("//a[contains(@class,'history login ng-star-inserted')]");
     static By mail=By.xpath("//input[@placeholder='Enter Email address']");
     static By verify_email=By.xpath("//div[@class='verify-btn-div']");
     static By random_email=By.xpath("//body/div[@id='app']/div[2]/div[1]/div[2]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/button[3]");
@@ -61,7 +61,7 @@ public class  UserRegister extends BaseClass {
         driver.switchTo().window(tabs.get(1));
         Utils.wait(4000);
         Utils.implicitWait(7);
-        Utils.waitForVisibilityOfElements(otpMail, 50);
+        Utils.waitForVisibilityOfElements(otpMail, 20);
         driver.findElement(otpMail).click();
         Log.info("opened Mail containing OTP");
         String otp_generated=driver.findElement(read_otp).getText();
@@ -122,14 +122,15 @@ public class  UserRegister extends BaseClass {
         Assert.assertTrue(menu.contains("Menu"));
         Log.info("Email registered successfully");
 
-        String userDetailsFilePath = properties.getProperty("user_details_file");
+        String userDetailsFilePath = properties.getProperty("user_details_csv");
         System.out.println("path " + userDetailsFilePath);
         //writing the email and password to a csv file
         HandleCSV.writeData(userDetailsFilePath,email,password);
     }
 
     public static void clickLoginBtn(){
-        driver.findElement(Login_Page).click();
+        Utils.scrollUpTo(driver.findElement(loginBtn));
+        driver.findElement(loginBtn).click();
     }
 
     public static String getRandomEmail(){
