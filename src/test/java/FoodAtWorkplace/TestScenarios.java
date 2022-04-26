@@ -233,7 +233,6 @@ public class TestScenarios extends BaseClass {
 
     }
 
-    //        TODO :- filtering operation on order history page
   @Test(priority = 8,groups = {"sanity","regression"})
     @Epic("EP008")
     @Story("Story: To verifying filter operation on order history")
@@ -255,6 +254,12 @@ public class TestScenarios extends BaseClass {
         AdminDashboardPage.goToOrderHistory();
 
         OrderHistory.filterByItemName(oderHistoryValidationTest);
+
+        OrderHistory.filterByFoodStatus(oderHistoryValidationTest);
+
+        OrderHistory.sortByDate(oderHistoryValidationTest);
+
+        OrderHistory.filterByOrderID(oderHistoryValidationTest);
 
     }
 
