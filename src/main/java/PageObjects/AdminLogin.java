@@ -33,6 +33,8 @@ public class AdminLogin extends BaseClass {
 
         Utils.extentScreenShotCapture(logInfo,"Login Successfully",successMessage);
 
+        Utils.wait(1500);
+
     }
 
 

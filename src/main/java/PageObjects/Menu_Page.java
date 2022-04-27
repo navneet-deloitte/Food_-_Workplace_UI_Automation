@@ -36,6 +36,8 @@ public class Menu_Page extends BaseClass {
     static By order_saved=By.xpath("//div[contains(text(),'The order is saved')]");
     static By orderplaced=By.xpath("//div[contains(text(),'Order Placed')]");
     static By itemDiv = By.xpath("//div[contains(@class,'card-body')]");
+    static By logo=By.xpath("//img[@class='logo-img']");
+
 
 
 
@@ -74,7 +76,7 @@ public class Menu_Page extends BaseClass {
     }
 
     public static void scrollToTop(){
-        WebElement loginButtonElement = driver.findElement(loginButton);
+        WebElement loginButtonElement = driver.findElement(logo);
         Utils.scrollUpTo(loginButtonElement);
     }
 
@@ -94,6 +96,7 @@ public class Menu_Page extends BaseClass {
 
     public static void addToCartFunctionality(ExtentTest test){
         logInfo=test.createNode("Adding items to cart");
+        Utils.wait(2000);
         clickOnTheHouseFunctionality();
         Utils.wait(2000);
         add_items(properties.getProperty("itemsData_OnTheHouse"));

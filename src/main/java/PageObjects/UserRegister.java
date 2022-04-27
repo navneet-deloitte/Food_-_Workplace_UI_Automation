@@ -41,6 +41,9 @@ public class  UserRegister extends BaseClass {
 
     // This method is for new user register
     public static void register(ExtentTest test){
+
+        Utils.deleteAllCookies();
+
         extentTest = test;
         ((JavascriptExecutor) driver).executeScript("window.open()");
         tabs = new ArrayList<String>(driver.getWindowHandles());
@@ -60,7 +63,7 @@ public class  UserRegister extends BaseClass {
         //switch to fakermail site, open mail containing otp and store that otp
         driver.switchTo().window(tabs.get(1));
         Utils.wait(4000);
-        Utils.implicitWait(7);
+        Utils.implicitWait(5);
         Utils.waitForVisibilityOfElements(otpMail, 20);
         driver.findElement(otpMail).click();
         Log.info("opened Mail containing OTP");
@@ -74,19 +77,33 @@ public class  UserRegister extends BaseClass {
         Log.info("OTP entered");
         int index = random_email_val.indexOf("@");
         String password = random_email_val.substring(0,index);
-        Utils.scrollDown();
-        Utils.wait(3000);
+
+        Utils.wait(1500);
         Actions act =  new Actions(driver);
-        act.moveToElement(driver.findElement(verifyButton)).click().perform();
+        driver.findElement(verifyButton).click();
+        int clickCount = 0;
+//        act.moveToElement(driver.findElement(verifyButton)).click().perform();
 
-        if(driver.findElement(passwordField).isDisplayed()){
-            enterPasswordAfterVerify(random_email_val,password);
+        while (driver.findElement(verifyButton).isDisplayed() && clickCount < 3){
+            Utils.wait(1000);
+//            act.moveToElement(driver.findElement(verifyButton)).click().perform();
+            driver.findElement(verifyButton).click();
+            clickCount++;
+            Log.info("verify button clicked");
+
         }
 
-        else{
-            act.moveToElement(driver.findElement(verifyButton)).click().perform();
-            enterPasswordAfterVerify(random_email_val,password);
-        }
+        enterPasswordAfterVerify(random_email_val,password);
+
+
+//        if(driver.findElement(passwordField).isDisplayed()){
+//            enterPasswordAfterVerify(random_email_val,password);
+//        }
+//
+//        else{
+//            act.moveToElement(driver.findElement(verifyButton)).click().perform();
+//            enterPasswordAfterVerify(random_email_val,password);
+//        }
 
 
     }
@@ -94,13 +111,16 @@ public class  UserRegister extends BaseClass {
     private static void enterPasswordAfterVerify(String email, String password) {
 
         ExtentTest verifyEmailTestNode = extentTest.createNode("User email verification ");
-        Utils.wait(1000);
-        Utils.extentScreenShotCapture(verifyEmailTestNode,"User email verified",toastMsg);
+        Log.info("ss of success toast msg");
+//        Utils.wait(1000);
+        if(driver.findElement(toastMsg).isDisplayed())
+            Utils.extentScreenShotCapture(verifyEmailTestNode,"User email verified",toastMsg);
         Log.info("OTP verified");
         //enter password and click on login button
-        Utils.wait(3000);
+        Utils.wait(1000);
         driver.findElement(passwordField).sendKeys(password);
         Log.info("Password entered");
+        Utils.wait(1000);
         driver.findElement(loginButton).click();
         Log.info("Login button clicked");
 
@@ -137,12 +157,22 @@ public class  UserRegister extends BaseClass {
         //open website to generate a random email and store that email
         driver.switchTo().window(tabs.get(1));
         driver.get(properties.getProperty("fakerMailUrl"));
-        driver.findElement(random_email).click();
+        Utils.wait(2000);
+
+
+        while(driver.findElement(get_random_mail).getAttribute("placeholder").equals("Loading...")) {
+            Utils.wait(2000);
+            driver.findElement(random_email).click();
+        }
+
         Log.info("Generated random email");
         Utils.wait(1000);
-        String random_email_val =driver.findElement(get_random_mail).getAttribute("placeholder");
+        String random_email_val ="";
+
+        random_email_val = driver.findElement(get_random_mail).getAttribute("placeholder");
 
         return random_email_val;
     }
+
 
 }

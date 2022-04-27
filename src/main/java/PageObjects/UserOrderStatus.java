@@ -16,7 +16,8 @@ import java.util.logging.Logger;
 
 public class UserOrderStatus extends BaseClass {
 
-    public static By order_id_path = By.xpath("//span[@class='order-id']/span");
+    public static By order_id_path = By.xpath("//div[contains(@class,'orderid')]");
+    public static By order_id_title_path = By.xpath("//div[contains(@class,'order-id')]");
     public static By received = By.xpath("//div[@class='container-fluid body']/div[4]/div[1]/div[1]");
     public static By cooking = By.xpath("//div[@class='container-fluid body']/div[4]/div[2]/div[1]");
     public static By ready = By.xpath("//div[@class='container-fluid body']/div[4]/div[2]/div[1]");
@@ -26,6 +27,8 @@ public class UserOrderStatus extends BaseClass {
     public static By confirmation_text = By.xpath("//p[@class='card-text']");
     public static By re_ordered_items = By.xpath("//div[@class='row order-row']/div/span");
     public static By oderHistoryBtn = By.xpath("//a[contains(text(), 'Order History')] ");
+    public static By logo = By.xpath("//img[@class='logo-img']");
+
 
     public static ExtentTest logInfo = null;
 
@@ -84,17 +87,38 @@ public class UserOrderStatus extends BaseClass {
     /* Validing Food status in Order Status Page  */
     public static void validatingFoodStatusCooking(String id, ExtentTest test){
 
-        logInfo = test.createNode("Validating the Status Of Food");
+        logInfo = test.createNode("Validating the Cooking Status Of Food");
         Utils.wait(3000);
-        String orderID = driver.findElement(order_id_path).getText();
-        Utils.extentScreenShotCapture(logInfo,"Order ID",order_id_path);
-        Utils.scrollDown();
-        String status_message = driver.findElement(cooking).getText();
-        Utils.extentScreenShotCapture(logInfo,"Order Status Message",cooking);
-        Assert.assertTrue(status_message.contains("Delicious Food in Making"));
-        Assert.assertEquals(orderID,id);
+
+        Utils.scrollUpTo(driver.findElement(logo));
+
+        Utils.extentScreenShotCapture(logInfo,"Order Status Message",order_id_title_path);
+
         Log.info("Successfully Validated the Food Status in Order Status Page");
 
+    }
+
+    public static int searchAndVerifyOrder(ExtentTest test, By order_id_path,String keyword) {
+
+        List<WebElement> webElementList = driver.findElements(order_id_path);
+
+        System.out.println("oder list " + webElementList.size());
+
+        for(int i = 0;i<webElementList.size();i++){
+            WebElement webElement = webElementList.get(i);
+
+            String orderId = webElement.getText().substring(9);
+            System.out.println("read " + orderId);
+
+            if(orderId.contains(keyword)){
+                Utils.scrollUpTo(webElement);
+                Utils.wait(1000);
+                Utils.extentScreenShotCapture(test,"Order Status verified",webElement);
+                return i;
+            }
+        }
+
+        return -1;
     }
 
     /* Validing Food status in Order Status Page  */

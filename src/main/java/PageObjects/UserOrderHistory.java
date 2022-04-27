@@ -18,12 +18,13 @@ public class UserOrderHistory extends BaseClass {
     public static By reorder_button = By.xpath("//a[contains(text(),'Reorder')]");
     public static By customize_button = By.xpath("//div[@class='content']/div[3]/a[2]");
     public static By view_status_button = By.xpath("//button[@title='View Status']");
-    public static By order_id = By.xpath("//div[@class='orderid']");
+    public static By order_id = By.xpath("//div[contains(@class,'orderid')]");
     public static By cancel_button = By.xpath("//button[@title='Cancel']");
     public static By pop_up_button = By.xpath("//button[contains(text(),'Yes')]");
     public static By itemlist = By.xpath("//div[@class='main text']/div[2]/div/div/div/div[1]/div[3]");
     public static By cancel_popup_message = By.xpath("//div[@id='toast-container']");
     static By toastMsg = By.xpath("//div[contains(@class,'toast-bottom-right toast-container')]");
+    public static By order_history_btn = By.xpath("//a[contains(text(),'Order History')]");
 
 
     public static List<String> items_in_cart = null;
@@ -105,18 +106,26 @@ public class UserOrderHistory extends BaseClass {
     }
 
     /* Validating The View Status Functionality in order History Page*/
-    public static void validatingViewStatusFunctionality(ExtentTest test){
+    public static void validatingViewStatusFunctionality(ExtentTest test, String orderId){
 
         logInfo = test.createNode("Validating View Status functionality in Order History Page");
-        List<WebElement> orderId = driver.findElements(order_id);
-//        String order_id = orderId.get(0).getText();
+
+        Log.info("Searching orders...");
+        System.out.println("orderId " + orderId);
+
+        Utils.wait(2000);
+
+        int oderIndex = UserOrderStatus.searchAndVerifyOrder(logInfo,order_id,orderId);
+
+        System.out.println("index "+oderIndex);
+
         List<WebElement> view_status_buttons = driver.findElements(view_status_button);
-        Utils.searchandclick(view_status_buttons.get(0));
+        Utils.searchandclick(view_status_buttons.get(oderIndex));
         Log.info("Clicked on View Status Button");
-        Utils.wait(10);
+        Utils.wait(1000);
         Utils.scrollUp();
         logInfo.info("View oder status");
-        UserOrderStatus.validatingFoodItemsInOrderStatusPage(logInfo);
+//        UserOrderStatus.validatingFoodItemsInOrderStatusPage(logInfo);
 
     }
 
@@ -180,6 +189,12 @@ public class UserOrderHistory extends BaseClass {
         }
 
         return ordered_food_items_by_user;
+    }
+
+    public static void clickOnOrderHistoryBtn(){
+        WebElement orderHistoryBtnEle = driver.findElement(order_history_btn);
+        Utils.scrollUpTo(orderHistoryBtnEle);
+        Utils.searchandclick(orderHistoryBtnEle);
     }
 
 }

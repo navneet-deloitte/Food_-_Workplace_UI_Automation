@@ -41,7 +41,8 @@ public class UserLoginPage extends BaseClass {
 
 
     public static void goto_login_page(){
-        driver.get(properties.getProperty("baseUrl"));
+//        Utils.deleteAllCookies();
+        Utils.wait(1000);
         WebElement loginBtnElement = driver.findElement(Login_Page);
         Utils.searchandclick(loginBtnElement);
     }
@@ -51,7 +52,8 @@ public class UserLoginPage extends BaseClass {
     }
 
     public static void goto_admin_login(){
-        Utils.searchandclick(driver.findElement(Admin_login));
+        driver.findElement(Admin_login).click();
+        Utils.implicitWait(1);
     }
 
 
@@ -73,6 +75,8 @@ public class UserLoginPage extends BaseClass {
 
         logInfo.pass("Login success");
         Utils.extentScreenShotCapture(logInfo,"Login Successfully",toastMsg);
+
+        Utils.wait(1000);
     }
 
 

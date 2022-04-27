@@ -29,7 +29,7 @@ public class TestScenarios extends BaseClass {
     }
 
 
-//    @Test(priority = 1, groups = {"smoke"})
+    @Test(priority = 1, groups = {"smoke"})
     @Epic("EP001")
     @Story("Story: To verifying switching between tabs and visibility of item cards")
     @Feature("Feature1: Switching between tabs")
@@ -57,7 +57,7 @@ public class TestScenarios extends BaseClass {
     }
 
     
-//  @Test(priority = 2,groups = {"re-test","regression","functional"})
+  @Test(priority = 2,groups = {"re-test","regression","functional"})
     @Epic("EP002")
     @Story("Story: To verifying adding items in cart without login")
     @Feature("Feature2: Adding items in cart")
@@ -79,7 +79,7 @@ public class TestScenarios extends BaseClass {
 
     }
 
-//  @Test(priority = 3,groups = {"sanity ","regression","functional"})
+  @Test(priority = 3,groups = {"sanity ","regression","functional"})
     @Epic("EP003")
     @Story("Story: To verifying new user registration via Email")
     @Feature("Feature3: New User Registration")
@@ -98,7 +98,7 @@ public class TestScenarios extends BaseClass {
 
     }
 
-//  @Test(priority = 4,groups = {"sanity","regression","functional"})
+  @Test(priority = 4,groups = {"sanity","regression","functional"})
     @Epic("EP004")
     @Story("Story: To verifying exiting user login")
     @Feature("Feature4: Exiting User Login")
@@ -125,7 +125,7 @@ public class TestScenarios extends BaseClass {
 
     }
 
-//  @Test(priority = 5,groups = {"sanity","regression"})
+  @Test(priority = 5,groups = {"sanity","regression"})
     @Epic("EP005")
     @Story("Story: To verifying admin login via Email")
     @Feature("Feature5: Admin login")
@@ -135,7 +135,6 @@ public class TestScenarios extends BaseClass {
     public void adminLoginTest(){
         ExtentTest adminLoginTest = extent.createTest("Admin Login Test");
 
-        UserLoginPage.logout();
 
         UserLoginPage.goto_login_page();
 
@@ -151,7 +150,7 @@ public class TestScenarios extends BaseClass {
 
     }
 
-//    @Test(priority = 6,groups = {"regression","functional"})
+    @Test(priority = 6,groups = {"regression","functional"})
     @Epic("EP006")
     @Story("Story: To verifying Placing Order functionality")
     @Feature("Feature6: Placing Order")
@@ -180,7 +179,7 @@ public class TestScenarios extends BaseClass {
 
         UserOrderStatus.clickOrderHistoryBtn();
 
-        UserOrderHistory.validatingViewStatusFunctionality(orderItemTest);
+        UserOrderHistory.validatingViewStatusFunctionality(orderItemTest,oderId);
 
         UserOrderHistory.validatingOrderedFoodItems(orderItemTest);
 
@@ -204,8 +203,8 @@ public class TestScenarios extends BaseClass {
     }
 
 
-//    @Test(priority = 7,groups = {"sanity"})
-    @Epic("EP003")
+    @Test(priority = 7,groups = {"sanity"})
+    @Epic("EP007")
     @Story("Story: To verifying filter operation on Admin Dashboard")
     @Feature("Feature7: Filtering on Admin Dashboard")
     @Step("Filtering on Admin Dashboard")
@@ -215,7 +214,6 @@ public class TestScenarios extends BaseClass {
 
         ExtentTest adminDashBoardTest = extent.createTest("Admin DashBoard Test");
 
-        Menu_Page.scrollToTop();
 
         UserLoginPage.goto_login_page();
 
@@ -225,46 +223,17 @@ public class TestScenarios extends BaseClass {
 
         AdminDashboardPage.filterByAll(adminDashBoardTest,"Cheese Balls");
 
-        AdminDashboardPage.filterByEmailId(adminDashBoardTest);
+//        AdminDashboardPage.filterByEmailId(adminDashBoardTest);
 
-        AdminDashboardPage.filterByOrderId(adminDashBoardTest);
+//        AdminDashboardPage.filterByOrderId(adminDashBoardTest);
 
-//        Menu_Page.logoutFunctionality();
+        AdminDashboardPage.adminLogOut();
 
     }
 
-  @Test(priority = 8,groups = {"sanity","regression"})
+
+    @Test(priority = 8,groups = {"sanity","regression","functional"})
     @Epic("EP008")
-    @Story("Story: To verifying filter operation on order history")
-    @Feature("Feature7: User Registration")
-    @Step("Filtering on  order history")
-    @Description("Verifying filter operations on order history")
-    @Severity(SeverityLevel.NORMAL)
-    public void oderHistoryValidationTest(){
-        ExtentTest oderHistoryValidationTest = extent.createTest("Oder History Validation Test");
-
-        Utils.deleteAllCookies();
-        Utils.wait(500);
-        UserLoginPage.goto_login_page();
-        UserLoginPage.goto_admin_login();
-        AdminLogin.login(oderHistoryValidationTest);
-
-        // dashboard order id cart highlight
-
-        AdminDashboardPage.goToOrderHistory();
-
-        OrderHistory.filterByItemName(oderHistoryValidationTest);
-
-        OrderHistory.filterByFoodStatus(oderHistoryValidationTest);
-
-        OrderHistory.sortByDate(oderHistoryValidationTest);
-
-        OrderHistory.filterByOrderID(oderHistoryValidationTest);
-
-    }
-
-//    @Test(priority = 9,groups = {"sanity","regression","functional"})
-    @Epic("EP009")
     @Story("Story: To verifying changes of order status reflected or not.")
     @Feature("Feature9: Changing Order Status")
     @Step("Changing Order Status")
@@ -274,9 +243,9 @@ public class TestScenarios extends BaseClass {
 
         ExtentTest changeOrderStatusTest = extent.createTest("Change Order Status Test");
 
-        Utils.deleteAllCookies();
+//        Utils.deleteAllCookies();
 
-        Menu_Page.scrollToTop();
+        Utils.wait(1000);
 
         UserLoginPage.goto_login_page();
 
@@ -307,13 +276,65 @@ public class TestScenarios extends BaseClass {
 
         Menu_Page.clickOrderHistoryButton();
 
-        UserOrderHistory.validatingViewStatusFunctionality(changeOrderStatusTest);
+        UserOrderHistory.validatingViewStatusFunctionality(changeOrderStatusTest,oderId);
 
-        UserOrderStatus.validatingFoodStatusCooking(oderId,changeOrderStatusTest);
+
+        AdminDashboardPage.adminLogOut();
 
     }
 
 
+    @Test(priority = 9,groups = {"regression","functional"})
+    @Epic("EP009")
+    @Story("Story: To verifying Add new Item in menu list.")
+    @Feature("Feature9: Add New Item")
+    @Step("Add New Item")
+    @Description("Verifying the Add new Item in menu list by Admin dashboard.")
+    @Severity(SeverityLevel.CRITICAL)
+    public static void addNewItemTest(){
+        ExtentTest addNewItemTest = extent.createTest("Add New Item Validation Test");
+
+        Utils.deleteAllCookies();
+        Utils.wait(1000);
+        UserLoginPage.goto_login_page();
+        UserLoginPage.goto_admin_login();
+        AdminLogin.login(addNewItemTest);
+        Utils.wait(1000);
+        AdminDashboardPage.goToUpdateMenu();
+        UpdateMenuPage.clickAddItemBtn();
+
+        UpdateMenuPage.fillInCompleteData(addNewItemTest);
+        UpdateMenuPage.clickCancelBtn();
+        Utils.wait(1000);
+        UpdateMenuPage.clickAddItemBtn();
+        UpdateMenuPage.fillCompleteData(addNewItemTest);
+
+        AdminDashboardPage.adminLogOut();
+
+    }
+
+
+    @Test(priority = 10,groups = {"regression","functional"})
+    @Epic("EP0010")
+    @Story("Story: To verifying Edit details of a Item.")
+    @Feature("Feature9: Edit Details of a Item.")
+    @Step("Edit Item's Details")
+    @Description("Verifying the changes of Item details reflected or not.")
+    @Severity(SeverityLevel.CRITICAL)
+    public static void editItemTest(){
+        ExtentTest editItemTest = extent.createTest("Edit Item Validation Test");
+
+        Utils.deleteAllCookies();
+        Utils.wait(1000);
+        UserLoginPage.goto_login_page();
+        UserLoginPage.goto_admin_login();
+        AdminLogin.login(editItemTest);
+        Utils.wait(1000);
+        AdminDashboardPage.goToUpdateMenu();
+        UpdateMenuPage.editItemDetails(editItemTest);
+
+        AdminDashboardPage.adminLogOut();
+    }
 
 
 

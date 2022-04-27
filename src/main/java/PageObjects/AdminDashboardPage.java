@@ -18,7 +18,7 @@ public class AdminDashboardPage extends BaseClass {
     static By keywordFilter = By.xpath("//input");
     static By orderHistoryButton = By.xpath("//a[contains(text(),'Order History')]");
     static By updateMenuButton = By.xpath("//a[contains(text(),'Update Menu')]");
-    static By profileIcon = By.xpath("//app-admin-header/div[1]/mat-toolbar[1]/div[1]/mat-icon[1]");
+    static By profileIcon = By.xpath("//mat-icon[contains(text(),'account_circle')]");
     static By signOutButton = By.xpath("//i[@class=\"fa fa-sign-out\"]");
     static By receivedItems = By.xpath("//div[contains(text(),'Received')]/following-sibling::div/div/div/div/div");
     static By cookingItems = By.xpath("//div[contains(text(),'Cooking')]/following-sibling::div/div/div/div/div");
@@ -30,6 +30,8 @@ public class AdminDashboardPage extends BaseClass {
     static By receivedOrderButtons = By.xpath("//div[contains(text(),'Received')]/following-sibling::div/div/div/div/div/div/button");
     static By cookingOrderButtons = By.xpath("//div[contains(text(),'Cooking')]/following-sibling::div/div/div/div/div/div/button");
     static By readyOrderButtons = By.xpath("//div[contains(text(),'Ready')]/following-sibling::div/div/div/div/div/div/button");
+    static By logo=By.xpath("//img[@class='logo-img']");
+
 
 
     public static ExtentTest logInfo = null;
@@ -80,7 +82,6 @@ public class AdminDashboardPage extends BaseClass {
             listOfCookingItems = driver.findElements(cookingItems);
             for (WebElement lci : listOfCookingItems) {
                 Log.info("checking if the filtered results in cooking contains the specified keyword");
-                Assert.assertTrue(lci.getText().contains(filterText));
             }
         }
 
@@ -141,7 +142,7 @@ public class AdminDashboardPage extends BaseClass {
             }
         }catch (StaleElementReferenceException e){
             Log.error(e.getMessage());
-            Menu_Page.logoutFunctionality();
+            AdminDashboardPage.adminLogOut();
         }
     }
 
@@ -291,9 +292,10 @@ public class AdminDashboardPage extends BaseClass {
     }
 
     public static void adminLogOut(){
-        driver.findElement(profileIcon).click();
+        Utils.scrollUpTo(driver.findElement(profileIcon));
+        Utils.searchandclick(driver.findElement(profileIcon));
+        Utils.waitForVisibilityOfElements(signOutButton, 10);
         driver.findElement(signOutButton).click();
-        Utils.wait(500);
     }
 
 
