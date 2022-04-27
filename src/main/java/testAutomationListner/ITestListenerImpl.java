@@ -20,12 +20,13 @@ public class ITestListenerImpl extends BaseClass implements ITestListener
 	}
 
 	public void onTestSuccess(ITestResult result) {
-		System.out.println("PASS");
+		Log.info("PASS");
 	}
 
 	public void onTestFailure(ITestResult result) {
 
 		testcase.log(Status.FAIL, "Test is failed");
+		Log.error("Test is failed");
 //		extent.flush();
 		ExtentReportListener extentReportListener=new ExtentReportListener();
 		try {

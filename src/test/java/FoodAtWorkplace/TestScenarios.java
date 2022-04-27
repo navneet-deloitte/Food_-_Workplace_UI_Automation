@@ -193,11 +193,6 @@ public class TestScenarios extends BaseClass {
 
         AdminLogin.login(orderItemTest);
 
-//        TODO
-        // validate the order in user dashboard
-
-        // card high ( id )
-
         Menu_Page.logoutFunctionality();
 
     }
@@ -214,7 +209,6 @@ public class TestScenarios extends BaseClass {
 
         ExtentTest adminDashBoardTest = extent.createTest("Admin DashBoard Test");
 
-
         UserLoginPage.goto_login_page();
 
         UserLoginPage.goto_admin_login();
@@ -222,10 +216,6 @@ public class TestScenarios extends BaseClass {
         AdminLogin.login(adminDashBoardTest);
 
         AdminDashboardPage.filterByAll(adminDashBoardTest,"Cheese Balls");
-
-//        AdminDashboardPage.filterByEmailId(adminDashBoardTest);
-
-//        AdminDashboardPage.filterByOrderId(adminDashBoardTest);
 
         AdminDashboardPage.adminLogOut();
 
@@ -338,7 +328,7 @@ public class TestScenarios extends BaseClass {
 
 
 
-   @AfterClass
+   @AfterClass(groups = {"sanity","re-test","smoke","regression","functional"})
    public void tearDown()
    {
        driver.quit();

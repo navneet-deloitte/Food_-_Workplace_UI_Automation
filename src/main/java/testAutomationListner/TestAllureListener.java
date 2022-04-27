@@ -8,6 +8,7 @@ import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
 import resources.baseClass.BaseClass;
+import resources.helperClasses.Utils;
 
 
 public class TestAllureListener extends BaseClass implements ITestListener {
@@ -73,6 +74,7 @@ public class TestAllureListener extends BaseClass implements ITestListener {
         if (driver instanceof WebDriver) {
             System.out.println("Screenshot captured for test case:" + getTestMethodName(iTestResult));
             saveScreenshotPNG(driver);
+            Utils.deleteAllCookies();
         }
         // Save a log on allure.
         saveTextLog(getTestMethodName(iTestResult) + " failed and screenshot taken!");

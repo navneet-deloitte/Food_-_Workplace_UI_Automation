@@ -23,7 +23,7 @@ public class ExtentReportListener {
 	public static ExtentReports extent;
 	public static ExtentTest test;
 
-	@BeforeClass
+	@BeforeClass(groups = {"sanity","re-test","smoke","regression","functional"})
 	public static ExtentReports setUp() {
 		String reportLocation = "./Reports/Extent_Report.html";
 		report = new ExtentHtmlReporter(reportLocation);		
@@ -91,7 +91,7 @@ public class ExtentReportListener {
 		return str;
 	}
 
-	@AfterClass
+	@AfterClass(groups = {"sanity","re-test","smoke","regression","functional"})
 	public void endReport(){
 		extent.flush();
 	}

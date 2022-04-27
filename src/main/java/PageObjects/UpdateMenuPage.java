@@ -233,8 +233,9 @@ public class UpdateMenuPage extends BaseClass {
 
         Utils.highlightElement(addItemFrame,"blue");
         Utils.extentScreenShotCapture(extentTest,"Edit item successfully");
+
         clickAddBtn();
-//        clickCancelBtn();
+
         Log.info("Item's price and img edited");
 
         Utils.wait(1000);

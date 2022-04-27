@@ -155,5 +155,7 @@ public class UserLoginPage extends BaseClass {
         Log.info("Clicking on Login");
         driver.findElement(login).click();
 
+        Utils.wait(1000);
+
     }
 }
