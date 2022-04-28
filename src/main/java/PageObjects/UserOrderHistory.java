@@ -171,6 +171,7 @@ public class UserOrderHistory extends BaseClass {
         Log.info("Successfully Validated the Cancel Functionality in Order Status page");
     }
 
+    // This method id used for getting all the Ordered items list
     private static List<List<String>> getOrderItemsList(){
 
         List<List<String>> ordered_food_items_by_user = new ArrayList<>();
@@ -190,7 +191,7 @@ public class UserOrderHistory extends BaseClass {
 
         return ordered_food_items_by_user;
     }
-
+//    This method is for click on Order History Button
     public static void clickOnOrderHistoryBtn(){
         WebElement orderHistoryBtnEle = driver.findElement(order_history_btn);
         Utils.scrollUpTo(orderHistoryBtnEle);

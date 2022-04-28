@@ -1,20 +1,15 @@
 package PageObjects;
 
 import com.aventstack.extentreports.ExtentTest;
-import com.aventstack.extentreports.Status;
 import org.openqa.selenium.By;
-import org.openqa.selenium.ElementNotVisibleException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
-
 import resources.baseClass.BaseClass;
 import resources.helperClasses.HandleCSV;
 import resources.helperClasses.Utils;
 import testAutomationListner.Log;
 
-import java.io.IOException;
-import java.util.Properties;
 
 public class UserLoginPage extends BaseClass {
     static By logo=By.xpath("//img[@class='logo-img']");
@@ -39,7 +34,7 @@ public class UserLoginPage extends BaseClass {
     public static String loginDetails;
 
 
-
+    // This method is for go to user login page
     public static void goto_login_page(){
 //        Utils.deleteAllCookies();
         Utils.wait(1000);
@@ -47,10 +42,7 @@ public class UserLoginPage extends BaseClass {
         Utils.searchandclick(loginBtnElement);
     }
 
-    public static void logout() {
-        Utils.deleteAllCookies();
-    }
-
+    // This method is for go to admin login page
     public static void goto_admin_login(){
         driver.findElement(Admin_login).click();
         Utils.implicitWait(1);
@@ -79,7 +71,7 @@ public class UserLoginPage extends BaseClass {
         Utils.wait(1000);
     }
 
-
+    // This method is for verifying the visibility of website logo
     public static void verify_logo(ExtentTest test){
         logInfo=test.createNode("Logo verification");
         boolean logo_status=driver.findElement(logo).isDisplayed();
@@ -95,7 +87,7 @@ public class UserLoginPage extends BaseClass {
         Log.info("Logo is present");
     }
 
-    public static void cartempty(ExtentTest test) throws IOException, InterruptedException {
+    public static void cartEmptyCheck(ExtentTest test){
         logInfo=test.createNode("Cart empty");
         Utils.searchandclick(driver.findElement(cartButton));
         Utils.wait(1000);
@@ -111,8 +103,6 @@ public class UserLoginPage extends BaseClass {
         }
         Log.info("Cart is empty");
     }
-
-
 
 
     //    This method is for Invalid login with invalid credentials
@@ -135,6 +125,8 @@ public class UserLoginPage extends BaseClass {
         Utils.extentScreenShotCapture(logInfo,"Login Failed");
     }
 
+
+    // This method is for filling login credentials
     private static void fillLoginDetails(String loginDetails,Boolean verify) {
         String[] credentials=loginDetails.split(",");
         Log.info("Entering emailId...");

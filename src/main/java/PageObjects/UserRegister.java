@@ -82,11 +82,9 @@ public class  UserRegister extends BaseClass {
         Actions act =  new Actions(driver);
         driver.findElement(verifyButton).click();
         int clickCount = 0;
-//        act.moveToElement(driver.findElement(verifyButton)).click().perform();
 
         while (driver.findElement(verifyButton).isDisplayed() && clickCount < 3){
             Utils.wait(1000);
-//            act.moveToElement(driver.findElement(verifyButton)).click().perform();
             driver.findElement(verifyButton).click();
             clickCount++;
             Log.info("verify button clicked");
@@ -95,19 +93,9 @@ public class  UserRegister extends BaseClass {
 
         enterPasswordAfterVerify(random_email_val,password);
 
-
-//        if(driver.findElement(passwordField).isDisplayed()){
-//            enterPasswordAfterVerify(random_email_val,password);
-//        }
-//
-//        else{
-//            act.moveToElement(driver.findElement(verifyButton)).click().perform();
-//            enterPasswordAfterVerify(random_email_val,password);
-//        }
-
-
     }
 
+    // This method is for entering password after verified user email
     private static void enterPasswordAfterVerify(String email, String password) {
 
         ExtentTest verifyEmailTestNode = extentTest.createNode("User email verification ");
@@ -127,7 +115,7 @@ public class  UserRegister extends BaseClass {
         afterLogin(email,password);
 
     }
-
+//    This method is for storing user data after login
     public static void afterLogin(String email, String password){
         ExtentTest userCreateTestNode = extentTest.createNode("User Authorize verification ");
         Utils.wait(1000);
@@ -148,11 +136,13 @@ public class  UserRegister extends BaseClass {
         HandleCSV.writeData(userDetailsFilePath,email,password);
     }
 
+    //    This method is for click on Login Button
     public static void clickLoginBtn(){
         Utils.scrollUpTo(driver.findElement(loginBtn));
         driver.findElement(loginBtn).click();
     }
 
+//    This method is for generate random email using faker mail website
     public static String getRandomEmail(){
         //open website to generate a random email and store that email
         driver.switchTo().window(tabs.get(1));

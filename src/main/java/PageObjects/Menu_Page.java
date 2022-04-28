@@ -46,54 +46,59 @@ public class Menu_Page extends BaseClass {
     public static String order_id_file = properties.getProperty("order_id_csv");
     public static String pathOnYou = properties.getProperty("itemsData_OnYou");
 
-
+//    This method is for click on OnTheHouse tab
     public static void clickOnTheHouseFunctionality() {
         Utils.searchandclick(driver.findElement(onTheHouse));
     }
 
+//    This method is for click on OnYou tab
     public static void clickOnYou() {
         WebElement on_you=driver.findElement(onYou);
         Utils.searchandclick(on_you);
     }
-
+//    This method is for click on place order button
     public static void clickonplaceorder(){
         WebElement placeorder=driver.findElement(place_order);
         Utils.searchandclick(placeorder);
     }
-
+//    This method is for click on yes option on confirmation popup
     public static void clickonyesinpopup(){
         WebElement yes=driver.findElement(click_yes);
         Utils.searchandclick(yes);
     }
-
+//    This method is for click on Cart button
     public static void clickCartButton() {
         WebElement cart=driver.findElement(cartButton);
         Utils.searchandclick(cart);
     }
-
+//    This method is for hover on an item
     public static void hoverCardItem(){
         Utils.hover(itemDiv);
     }
 
+    //    This method is for scroll up to top of the page
     public static void scrollToTop(){
         WebElement loginButtonElement = driver.findElement(logo);
         Utils.scrollUpTo(loginButtonElement);
     }
 
+//    This method is for click on login button
     public static void clickLoginButton(ExtentTest test) {
         Utils.searchandclick(driver.findElement(loginButton));
     }
 
+    //    This method is for click on Order History button
     public static void clickOrderHistoryButton() {
         Utils.searchandclick(driver.findElement(orderHistoryButton));
     }
 
+    //    This method is for perform logout functionality
     public static void logoutFunctionality() {
         Utils.searchandclick(driver.findElement(profileIcon));
         Utils.waitForVisibilityOfElements(logoutButton, 10);
         driver.findElement(logoutButton).click();
     }
-
+    //    This method is for perform add item in cart functionality
     public static void addToCartFunctionality(ExtentTest test){
         logInfo=test.createNode("Adding items to cart");
         Utils.wait(2000);
@@ -109,7 +114,8 @@ public class Menu_Page extends BaseClass {
         Utils.extentScreenShotCapture(logInfo,"Items added to cart",entire_cart);
     }
 
-    public static void deletefromCartFunctionality(ExtentTest test) throws InterruptedException, IOException {
+//    This method is for perform delete items from cart
+    public static void deleteFromCartFunctionality(ExtentTest test) throws InterruptedException, IOException {
         logInfo=test.createNode("deleting items from cart");
         clickOnTheHouseFunctionality();
         Utils.wait(3000);
@@ -123,6 +129,7 @@ public class Menu_Page extends BaseClass {
         Utils.extentScreenShotCapture(logInfo,"Items deleted from cart",entire_cart);
     }
 
+    //    This method is for deleting an items from cart
     public static void delete_items(String location) throws IOException {
         List<List<String>> itemsData = HandleCSV.newFileOperation(location);
         List<WebElement> fooditems = driver.findElements(AllItems);
@@ -147,6 +154,7 @@ public class Menu_Page extends BaseClass {
         }
     }
 
+    //    This method is for items validation in cart
     public static void cart_validation(ExtentTest test){
         logInfo=test.createNode("Validating cart");
         clickCartButton();
@@ -214,7 +222,7 @@ public class Menu_Page extends BaseClass {
         }
     }
 
-
+    //    This method is for placing the order functionality
     public static void placeTheOrder(ExtentTest test){
         logInfo=test.createNode("Placing the order");
         Log.info("Clicking on place the order");
@@ -227,6 +235,7 @@ public class Menu_Page extends BaseClass {
         Log.info("Order is saved");
     }
 
+    //    This method return the oder id of recently placed order
     public static String checkOrderStatusAndId(ExtentTest test){
         logInfo=test.createNode("Checking order is placed and getting order id");
         logInfo.pass("Order is placed");
@@ -243,8 +252,7 @@ public class Menu_Page extends BaseClass {
         return id;
     }
 
-
-
+//    This method is for adding items in cart
     public static void add_items(String location){
         List<List<String>> itemsData = new ArrayList<>();
         try {

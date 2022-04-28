@@ -43,12 +43,12 @@ public class AdminLogin extends BaseClass {
 
         driver.findElement(userLogin).click();
     }
-
+//    This method is for go to login page
     public static void goto_login_page()
     {
         driver.findElement(Login_Page).click();
     }
-
+//    This method is for go to Admin Login Page
     public static void go_to_adminLoginPage()
     {
         driver.findElement(adminLoginPage).click();
@@ -70,7 +70,7 @@ public class AdminLogin extends BaseClass {
 
     }
 
-
+    // This method is for fill email id and password in their respective fields
     public static void getAndFillLoginData(String data_csv) {
 
         Log.info("Reading login data from csv file...");

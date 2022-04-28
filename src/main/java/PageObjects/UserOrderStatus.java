@@ -98,6 +98,7 @@ public class UserOrderStatus extends BaseClass {
 
     }
 
+    // This method is for searching a specific order in oder list and verify that
     public static int searchAndVerifyOrder(ExtentTest test, By order_id_path,String keyword) {
 
         List<WebElement> webElementList = driver.findElements(order_id_path);
@@ -137,6 +138,7 @@ public class UserOrderStatus extends BaseClass {
 
     }
 
+    //    This method is for click on Order History Button
     public static void clickOrderHistoryBtn(){
         driver.findElement(oderHistoryBtn).click();
     }

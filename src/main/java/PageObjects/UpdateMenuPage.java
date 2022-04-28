@@ -45,7 +45,8 @@ public class UpdateMenuPage extends BaseClass {
 
     public static String editedIteName = "";
 
-
+//   This method is for searching item in item list which is not used
+//   for placing order and return that's index
     private static int unUsedItem(){
 
         itemList = driver.findElements(itemsXpath);
@@ -79,6 +80,7 @@ public class UpdateMenuPage extends BaseClass {
         return -1;
     }
 
+    //    This method is for adding a list items inside another list
     private static void addItemInList(List<List<String>> list){
 
         for(int i =0;i<list.size();i++){
@@ -86,22 +88,22 @@ public class UpdateMenuPage extends BaseClass {
         }
     }
 
-    public static void clickUpdateMenuBtn(){
-        driver.findElement(updateMenuBtn).click();
-    }
-
+    //    This method is for click on Add new Item button
     public static void clickAddItemBtn() {
         driver.findElement(addItemBtn).click();
     }
 
+    //    This method is for click on add item positive button
     public static void clickAddBtn(){
         driver.findElement(addBtn).click();
     }
 
+    //    This method is for click on cancle button
     public static void clickCancelBtn(){
         driver.findElement(cancelBtn).click();
     }
 
+    //    This method is for click on edit item button
     public static void clickEditItemBtn(int index) {
         WebElement editItemBtn = driver.findElements(By.xpath(editItemBtnXpath)).get(index);
         Utils.scrollUpTo(editItemBtn);
@@ -110,21 +112,17 @@ public class UpdateMenuPage extends BaseClass {
         editItemBtn.click();
     }
 
-    public static void switchAddItemFrame(){
-
-        WebElement frame = driver.findElement(addItemFrame);
-
-//        Utils.switchFrame(frame);
-    }
-
+    //    This method is for filling all the details of an item in Add item popUp
     public static void fillCompleteData(ExtentTest test){
         fillItemData(test,true);
     }
 
+    //    This method is for filling incomplete details of an item in Add item popUp
     public static void fillInCompleteData(ExtentTest test){
         fillItemData(test,false);
     }
 
+    //    This method is for fill details of an item in Add item popUp
     private static void fillItemData(ExtentTest test, boolean fillAllData) {
 
         String testTile = "Add new Item Test with ";
@@ -176,12 +174,14 @@ public class UpdateMenuPage extends BaseClass {
 
     }
 
+    //    This method is for fill the data inside a particular field
     private static void fillFiled(By field, String value) {
         Utils.wait(1000);
         driver.findElement(field).sendKeys(value);
 
     }
 
+    // This method is for searching an item using search box
     public static void searchItem(ExtentTest test, String searchKeyword){
         extentTest = test.createNode("Searching item");
         driver.findElement(searchBox).sendKeys(searchKeyword);
@@ -199,15 +199,7 @@ public class UpdateMenuPage extends BaseClass {
         }
     }
 
-    public static void changeVisibility(int indexOfItem){
-        if(indexOfItem<itemList.size()) {
-            itemList.get(indexOfItem).findElement(availabilityToggle).click();
-        }
-        else{
-            Log.error("Invalid index");
-        }
-    }
-
+    // This method is for edit an item detail
     public static void editItemDetails(ExtentTest test){
 
         extentTest = test.createNode("Edit Item Test");
@@ -246,6 +238,7 @@ public class UpdateMenuPage extends BaseClass {
 
     }
 
+//    This is getter method for editItemName variable
     public static String getEditedIteName() {
         return editedIteName;
     }
