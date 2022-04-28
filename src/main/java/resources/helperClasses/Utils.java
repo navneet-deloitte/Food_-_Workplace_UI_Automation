@@ -63,17 +63,6 @@ public class Utils extends BaseClass
         WebElement dropDownElement = driver.findElement(dropdown_locator);
         Select select = new Select(dropDownElement);
         select.selectByVisibleText(option_name);
-
-//        WebElement dropdown_list= driver.findElement(dropdown_locator);
-//        List<WebElement> optionList=dropdown_list.findElements(By.tagName("a"));
-//        for (WebElement li : optionList) {
-//            if (li.getText().equals(option_name)) {
-//                Utils.implicitWait(30);
-//                li.click();
-//                break;
-//
-//            }
-//        }
     }
 
     /*to generate random number*/
@@ -147,7 +136,11 @@ public class Utils extends BaseClass
     public static void waitForVisibilityOfElements(By elementXpath,int specifiedTimeout)
     {
         WebDriverWait wait = new WebDriverWait(driver,specifiedTimeout);
-        wait.until(ExpectedConditions.visibilityOfElementLocated(elementXpath));
+        try {
+            wait.until(ExpectedConditions.visibilityOfElementLocated(elementXpath));
+        }catch (TimeoutException e){
+            Log.error("Element not visible");
+        }
     }
 
 
@@ -222,9 +215,13 @@ public class Utils extends BaseClass
 
     // for capturing screenshot with highlighting a particular web element using xpath
     public static void extentScreenShotCapture(ExtentTest logInfo, String logInfoMsg, By guide){
-        waitForVisibilityOfElements(guide,1);
-        WebElement webElement = driver.findElement(guide);
-        captureScreenShotHighlighted(logInfo,logInfoMsg,webElement);
+        waitForVisibilityOfElements(guide,30);
+        try {
+            WebElement webElement = driver.findElement(guide);
+            captureScreenShotHighlighted(logInfo,logInfoMsg,webElement);
+        }catch (NoSuchElementException e){
+            Log.error("No such element available");
+        }
 
 
     }

@@ -11,6 +11,7 @@ import resources.baseClass.BaseClass;
 
 import java.io.IOException;
 
+// This class is for TestListener
 public class ITestListenerImpl extends BaseClass implements ITestListener
 {
 	ExtentTest testcase;
@@ -27,7 +28,6 @@ public class ITestListenerImpl extends BaseClass implements ITestListener
 
 		testcase.log(Status.FAIL, "Test is failed");
 		Log.error("Test is failed");
-//		extent.flush();
 		ExtentReportListener extentReportListener=new ExtentReportListener();
 		try {
 			extentReportListener.captureScreenShot(driver);

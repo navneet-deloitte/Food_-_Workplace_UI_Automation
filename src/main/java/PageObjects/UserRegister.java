@@ -3,7 +3,8 @@ package PageObjects;
 import com.aventstack.extentreports.ExtentTest;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.interactions.Actions;
 import org.testng.Assert;
 import resources.baseClass.BaseClass;
@@ -11,26 +12,22 @@ import resources.helperClasses.HandleCSV;
 import resources.helperClasses.Utils;
 import testAutomationListner.Log;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Properties;
 
 
-public class  UserRegister extends BaseClass {
+public class UserRegister extends BaseClass {
 
     static By loginBtn=By.xpath("//a[contains(@class,'history login ng-star-inserted')]");
     static By mail=By.xpath("//input[@placeholder='Enter Email address']");
     static By verify_email=By.xpath("//div[@class='verify-btn-div']");
     static By random_email=By.xpath("//body/div[@id='app']/div[2]/div[1]/div[2]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/button[3]");
-    static By get_random_mail=By.xpath("//input[@id='email-address']");
-    static By otpMail=By.xpath("//div[contains(text(),'OTP Verification for Food@Workplace')]");
-    static By read_otp=By.xpath("/html[1]/body[1]/div[1]/main[1]/main[1]/div[1]/div[1]/div[2]/div[2]/dl[1]/div[2]/h4[1]");
+    static By get_random_mail=By.xpath("/html/body/div/div/div[1]/div/div[1]/div");
+    static By otpMail=By.xpath("//div[contains(@class,'message--container message--container-bold')]");
+    static By read_otp=By.xpath("/html[1]/body[1]/div[1]/div[1]/div[2]/div[2]/div[1]/div[2]/div[3]/div[1]/h4[1]");
     static By otpField=By.xpath("//input[@id='otp']");
     static By verifyButton=By.xpath("//body/app-root[1]/app-email-verification[1]/div[1]/div[1]/div[2]/div[7]");
-    static By passwordField=By.xpath("//body/app-root[1]/app-email-verification[1]/div[1]/div[1]/div[2]/div[5]/input[1]");
-    static By loginButton=By.xpath("//button[contains(text(),'Login')]");
+    static By passwordField=By.xpath("//input[@type= 'password']");
+    static By loginButton=By.xpath("//button[@class= 'btn']");
     static By menuText=By.xpath("/html/body/app-root/app-menu/div/div/div[1]/div/h1");
     static By toastMsg = By.xpath("//div[contains(@class,'toast-bottom-right toast-container')]");
 
@@ -48,6 +45,8 @@ public class  UserRegister extends BaseClass {
         ((JavascriptExecutor) driver).executeScript("window.open()");
         tabs = new ArrayList<String>(driver.getWindowHandles());
 
+        launchFakerMail();
+
         //open website to generate a random email and store that email
         String random_email_val = getRandomEmail();
 
@@ -64,7 +63,8 @@ public class  UserRegister extends BaseClass {
         driver.switchTo().window(tabs.get(1));
         Utils.wait(4000);
         Utils.implicitWait(5);
-        Utils.waitForVisibilityOfElements(otpMail, 20);
+        Utils.scrollDown();
+        Utils.waitForVisibilityOfElements(otpMail, 60);
         driver.findElement(otpMail).click();
         Log.info("opened Mail containing OTP");
         String otp_generated=driver.findElement(read_otp).getText();
@@ -83,9 +83,13 @@ public class  UserRegister extends BaseClass {
         driver.findElement(verifyButton).click();
         int clickCount = 0;
 
-        while (driver.findElement(verifyButton).isDisplayed() && clickCount < 3){
-            Utils.wait(1000);
-            driver.findElement(verifyButton).click();
+        while (driver.findElement(verifyButton).isDisplayed() && clickCount < 10){
+            Utils.wait(2000);
+            try {
+                driver.findElement(verifyButton).click();
+            }catch (NoSuchElementException | StaleElementReferenceException e){
+                break;
+            }
             clickCount++;
             Log.info("verify button clicked");
 
@@ -101,8 +105,7 @@ public class  UserRegister extends BaseClass {
         ExtentTest verifyEmailTestNode = extentTest.createNode("User email verification ");
         Log.info("ss of success toast msg");
 //        Utils.wait(1000);
-        if(driver.findElement(toastMsg).isDisplayed())
-            Utils.extentScreenShotCapture(verifyEmailTestNode,"User email verified",toastMsg);
+
         Log.info("OTP verified");
         //enter password and click on login button
         Utils.wait(1000);
@@ -115,7 +118,7 @@ public class  UserRegister extends BaseClass {
         afterLogin(email,password);
 
     }
-//    This method is for storing user data after login
+    //    This method is for storing user data after login
     public static void afterLogin(String email, String password){
         ExtentTest userCreateTestNode = extentTest.createNode("User Authorize verification ");
         Utils.wait(1000);
@@ -142,27 +145,46 @@ public class  UserRegister extends BaseClass {
         driver.findElement(loginBtn).click();
     }
 
-//    This method is for generate random email using faker mail website
+    //    This method is for generate random email using faker mail website
     public static String getRandomEmail(){
-        //open website to generate a random email and store that email
-        driver.switchTo().window(tabs.get(1));
-        driver.get(properties.getProperty("fakerMailUrl"));
-        Utils.wait(2000);
 
+        Log.info("Generating the random email");
 
-        while(driver.findElement(get_random_mail).getAttribute("placeholder").equals("Loading...")) {
-            Utils.wait(2000);
-            driver.findElement(random_email).click();
-        }
 
         Log.info("Generated random email");
         Utils.wait(1000);
         String random_email_val ="";
 
-        random_email_val = driver.findElement(get_random_mail).getAttribute("placeholder");
+        random_email_val = driver.findElement(get_random_mail).getText();
 
         return random_email_val;
     }
 
+    private static void launchFakerMail(){
+        //open website to generate a random email and store that email
+        driver.switchTo().window(tabs.get(1));
+        driver.get(properties.getProperty("cryptoMailUrl"));
+        Log.info("crypto Mail website launched");
+        Utils.wait(2000);
+
+        checkingEmailField();
+
+    }
+
+    private static void checkingEmailField() {
+        String emailId = driver.findElement(get_random_mail).getText();
+        try {
+            System.out.println("generated mail id "+ emailId);
+            if(emailId.isEmpty()) {
+                Utils.refreshPage();
+                Utils.wait(2000);
+                checkingEmailField();
+            }
+        }catch (NoSuchElementException e){
+            Utils.refreshPage();
+            Log.info("crypto Mail website refresh");
+            checkingEmailField();
+        }
+    }
 
 }

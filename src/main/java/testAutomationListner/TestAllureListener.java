@@ -10,7 +10,7 @@ import org.testng.ITestResult;
 import resources.baseClass.BaseClass;
 import resources.helperClasses.Utils;
 
-
+    // This is Allure report Listener
 public class TestAllureListener extends BaseClass implements ITestListener {
 
     private static String getTestMethodName(ITestResult iTestResult) {

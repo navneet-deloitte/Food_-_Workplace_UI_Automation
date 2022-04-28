@@ -23,6 +23,7 @@ public class ExtentReportListener {
 	public static ExtentReports extent;
 	public static ExtentTest test;
 
+	// Setup Extent report configuration
 	@BeforeClass(groups = {"sanity","re-test","smoke","regression","functional"})
 	public static ExtentReports setUp() {
 		String reportLocation = "./Reports/Extent_Report.html";
@@ -69,7 +70,8 @@ public class ExtentReportListener {
 			break;
 		}
 	}
-	
+
+	// This method capturing screenshot
 	public static String captureScreenShot(WebDriver driver) throws IOException {
 		TakesScreenshot screen = (TakesScreenshot) driver;
 		File src = screen.getScreenshotAs(OutputType.FILE);
@@ -78,7 +80,8 @@ public class ExtentReportListener {
 		FileUtils.copyFile(src, target);
 		return dest;
 	}
-	
+
+	// This method is used for getting current time
 	private static String getcurrentdateandtime() {
 		String str = null;
 		try {
@@ -91,6 +94,7 @@ public class ExtentReportListener {
 		return str;
 	}
 
+	// This method is flushed extent report
 	@AfterClass(groups = {"sanity","re-test","smoke","regression","functional"})
 	public void endReport(){
 		extent.flush();

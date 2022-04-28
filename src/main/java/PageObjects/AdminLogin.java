@@ -15,7 +15,7 @@ public class AdminLogin extends BaseClass {
     static By login = By.xpath("//button[contains(text(),'Login')]");
     static By failedMessage = By.xpath("//div[contains(text(),'Admin Unauthorized')]");
     static By successMessage = By.xpath("//div[contains(text(),'Success')]");
-    static By userLogin = By.xpath("//a[contains(text(),'Login Here')]");
+    static By userLogin = By.xpath("//a[@class= 'link2']");
     static By adminLoginPage = By.xpath("//a[contains(@class,'link2') and contains(text(),'Login Here')]");
 
     public static ExtentTest logInfo = null;
@@ -39,8 +39,8 @@ public class AdminLogin extends BaseClass {
 
 
 
-    public static void loginHereFunctionality(){
-
+    public static void goToUserLogin(){
+        Utils.wait(2000);
         driver.findElement(userLogin).click();
     }
 //    This method is for go to login page
@@ -62,7 +62,7 @@ public class AdminLogin extends BaseClass {
 
         getAndFillLoginData(Invalid_login_csv);
 
-        logInfo.fail("Invalid Admin credentials");
+        logInfo.pass("Invalid Admin credentials shows error message.");
 
         Utils.highlightElement(failedMessage,"blue");
 

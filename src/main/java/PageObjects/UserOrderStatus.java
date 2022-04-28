@@ -101,6 +101,9 @@ public class UserOrderStatus extends BaseClass {
     // This method is for searching a specific order in oder list and verify that
     public static int searchAndVerifyOrder(ExtentTest test, By order_id_path,String keyword) {
 
+        Utils.wait(2000);
+        Utils.refreshPage();
+
         List<WebElement> webElementList = driver.findElements(order_id_path);
 
         System.out.println("oder list " + webElementList.size());
@@ -119,7 +122,7 @@ public class UserOrderStatus extends BaseClass {
             }
         }
 
-        return -1;
+        return webElementList.size()-1;
     }
 
     /* Validing Food status in Order Status Page  */

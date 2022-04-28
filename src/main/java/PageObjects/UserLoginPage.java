@@ -13,7 +13,8 @@ import testAutomationListner.Log;
 
 public class UserLoginPage extends BaseClass {
     static By logo=By.xpath("//img[@class='logo-img']");
-    static By Login_Page=By.xpath("//a[contains(text(),'Login')]");
+//    static By Login_Page=By.xpath("//a[contains(text(),'Login')]");
+    static By Login_Page=By.xpath("//a[@class='history login ng-star-inserted']");
 //    static By mail=By.xpath("//input[contains(@class,'form-control input ng-pristine ng-valid ng-touched')]");
     static By mail=By.xpath("//input[@type = 'email']");
     static By verify_email=By.xpath("//div[@class='verify-btn-div']");
@@ -40,12 +41,13 @@ public class UserLoginPage extends BaseClass {
         Utils.wait(1000);
         WebElement loginBtnElement = driver.findElement(Login_Page);
         Utils.searchandclick(loginBtnElement);
+        Utils.wait(2000);
     }
 
     // This method is for go to admin login page
     public static void goto_admin_login(){
         driver.findElement(Admin_login).click();
-        Utils.implicitWait(1);
+        Utils.implicitWait(2);
     }
 
 
@@ -120,7 +122,7 @@ public class UserLoginPage extends BaseClass {
         fillLoginDetails(loginDetails,true);
 
 
-        logInfo.fail("Login failed for invalid credentials");
+        logInfo.pass("Login failed for invalid credentials shows error message.");
         Utils.highlightElement(toastMsg,"blue");
         Utils.extentScreenShotCapture(logInfo,"Login Failed");
     }
